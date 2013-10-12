@@ -132,7 +132,12 @@ INSTALLED_APPS = (
     # smartmin and its depenencies
     'guardian',
     'smartmin',
-    'smartmin.users'
+    'smartmin.users',
+
+    'sigtrac.public',
+    'sigtrac.carriers',
+    'sigtrac.reports',
+    'sigtrac.devices',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

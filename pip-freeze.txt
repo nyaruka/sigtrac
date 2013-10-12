@@ -27,3 +27,4 @@ simplejson==3.3.1
 six==1.4.1
 -e git+https://github.com/nyaruka/smartmin.git@f3d0a95a87ca9893ebfa1a29997db8d74f7af7ad#egg=smartmin-dev
 wsgiref==0.1.2
+gunicorn

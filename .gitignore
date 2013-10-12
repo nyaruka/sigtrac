@@ -10,3 +10,4 @@ sigtrac/settings.py
 config/gen/
 config/settings.py
 ngapp
+sigtrac.db

@@ -7,3 +7,5 @@ env
 *~
 .idea
 sigtrac/settings.py
+config/gen/
+config/settings.py

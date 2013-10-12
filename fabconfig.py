@@ -1,0 +1,14 @@
+config = dict( 
+   port='8009',
+   friendly_name='SigTrac',
+   app_dir='sigtrac',
+   name='sigtrac',
+   user='sigtrac',
+   env='env',
+   settings='settings.py.prod',
+   db='sigtrac',
+   db_user='sigtrac',
+   db_host='localhost',
+   custom_domains='sigtrac.nyaruka.com',
+   compress=True,
+   celery=True)

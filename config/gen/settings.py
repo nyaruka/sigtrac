@@ -28,7 +28,7 @@ MANAGERS = ADMINS
 INSTALLED_APPS = INSTALLED_APPS + ('gunicorn',)
 
 # static dir is different for prod
-# STATIC_URL = '/sitestatic/'
+STATIC_URL = '/sitestatic/'
 
 INTERNAL_IPS = ('127.0.0.1',)
 

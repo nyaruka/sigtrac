@@ -22,8 +22,8 @@ class ReportForm(forms.Form):
     packets_dropped = forms.IntegerField()
     signal_strength_dbm = forms.IntegerField()
     signal_strength_asu = forms.IntegerField()
-    latitude = forms.DecimalField()
-    longitude = forms.DecimalField()
+    latitude = forms.DecimalField(required=False)
+    longitude = forms.DecimalField(required=False)
     created_on = forms.IntegerField()
 
 
@@ -68,26 +68,32 @@ class Results(View):
         now = timezone.now()
         last_hour = now - timedelta(hours=1)
         last_day = now - timedelta(hours=24)
-        last_month = now - timedelta(days=7)
+        last_week = now - timedelta(days=7)
 
-        carriers = Carrier.objects.all()
+        data = {}
+        period_data = dict()
+        for carrier in Carrier.objects.all():
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            period_data[carrier.slug] = reports
 
-        data = []
-        for carrier in carriers:
-            carrier_data = dict()
-            carrier_data['carrier'] = carrier.name
-            hour_reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
-            carrier_data['hour'] = hour_reports
+        data['hour'] = period_data
 
-            day_reports =  Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
-            carrier_data['day'] = day_reports
+        period_data = dict()
+        for carrier in Carrier.objects.all():
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            period_data[carrier.slug] = reports
 
-            month_reports =  Report.objects.filter(carrier=carrier, created_on__gte=last_month).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
-            carrier_data['month'] = month_reports
+        data['day'] = period_data
 
-            data.append(carrier_data)
+        period_data = dict()
+        for carrier in Carrier.objects.all():
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            period_data[carrier.slug] = reports
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        data['week'] = period_data
+        data['current'] = data['week']
+
+        return HttpResponse(json.dumps([data]), content_type="application/json")
 
 class Graph(View):
     def get(self, request, *args, **kwargs):

@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from smartmin.models import SmartModel
 from sigtrac.carriers.models import Carrier
@@ -26,5 +27,25 @@ class Report(models.Model):
     latitude = models.DecimalField(max_digits=20, decimal_places=16, null=True, blank=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=16, null=True, blank=True)
 
-    created_on = models.DateTimeField(auto_now_add=True,
-                                      help_text="When this report was created")
+    created_on = models.DateTimeField(help_text="When this report was created")
+
+
+    @classmethod
+    def create(cls, report_form):
+        # look up our carrier, or create it
+        (report_form['carrier'], created) = Carrier.objects.get_or_create(name=report_form['carrier'])
+
+        existing_device = Device.objects.filter(uuid=report_form['device'])
+        if existing_device:
+            report_form['device'] = existing_device[0]
+        else:
+            report_form['device'] = Device.objects.create(uuid=report_form['device'],
+                                                          device_type=report_form['device_type'])
+
+        report_form['created_on'] = datetime.datetime.utcfromtimestamp(report_form['created_on'])
+
+        del report_form['device_type']
+
+        print report_form
+
+        return Report.objects.create(**report_form)

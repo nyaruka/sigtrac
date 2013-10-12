@@ -2,6 +2,62 @@
   %head
     %link{href:'{{STATIC_URL}}css/styles.css', rel:'stylesheet', type:'text/css'}
 
+
   %body
     YOUR INTERNET SUCKS
 
+    #chart
+
+<script src="{{ STATIC_URL }}/js/jquery-1.9.1.js"></script>
+<script src="{{ STATIC_URL }}/js/highcharts.js"></script>
+:javascript
+  $(function () {
+        $('#chart').highcharts({
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: 'Download speed'
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Download speed(bps)'
+                },
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' bps';
+                }
+            },
+
+            series: [
+               {% for msg_stat in data %}
+               {
+               name: '{{msg_stat.carrier|safe}}',
+               data: [
+               {% for elt in msg_stat.series %}
+               [
+               {% for unit in elt %}
+               {% if forloop.first %}Date.parse("{{ unit }}"){%else%}{{unit}}{% endif %}
+               {% if not forloop.last %},{% endif %}
+               {% endfor %}
+               ]
+               {% if not forloop.last %},{% endif %}
+               {% endfor %}
+               ]
+               }
+               {% if not forloop.last %},{% endif %}
+               {% endfor %}
+
+            ]
+        });
+    });

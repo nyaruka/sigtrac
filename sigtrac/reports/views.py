@@ -88,32 +88,3 @@ class Results(View):
             data.append(carrier_data)
 
         return HttpResponse(json.dumps(data), content_type="application/json")
-
-class Graph(View):
-    def get(self, request, *args, **kwargs):
-        """
-        View to give the data for the graph
-        """
-
-        carriers = Carrier.objects.all()
-
-        data = []
-        for carrier in carriers:
-            carrier_data = dict()
-            carrier_data['carrier'] = carrier.name
-
-            start = timezone.now()
-            end = start - timedelta(hours=24)
-
-            series = []
-
-            while start >= end:
-                reports = Report.objects.filter(carrier=carrier, created_on__range=[start-timedelta(hours=1), start]).aggregate(download_speed=Avg('download_speed'))
-                series.append([start.isoformat(),  reports['download_speed']])
-                start -= timedelta(hours=1)
-
-            carrier_data['series'] = series
-
-            data.append(carrier_data)
-
-        return HttpResponse(json.dumps(data), content_type="application/json")

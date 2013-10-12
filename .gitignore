@@ -2,3 +2,7 @@
 *.pot
 *.pyc
 local_settings.py
+env
+*~
+.idea
+sigtrac/settings.py

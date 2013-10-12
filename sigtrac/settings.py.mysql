@@ -1,0 +1,23 @@
+# import our default settings
+import logging
+from settings_common import *
+
+INSTALLED_APPS = INSTALLED_APPS + ('django_nose',)
+
+DEBUG = True
+TEMPLATE_DEBUG = True
+COMPRESS_ENABLED = True
+
+MANAGERS = ADMINS
+INSTALLED_APPS = INSTALLED_APPS + ('django_nose', 'debug_toolbar')
+
+# static dir is different for prod
+# STATIC_URL = '/sitestatic/'
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+CELERY_ALWAYS_EAGER = True
+BROKER_BACKEND = 'memory'
+

@@ -10,5 +10,5 @@ config = dict(
    db_user='sigtrac',
    db_host='localhost',
    custom_domains='sigtrac.nyaruka.com',
-   compress=True,
+#   compress=True,
    celery=True)

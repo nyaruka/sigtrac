@@ -121,5 +121,4 @@ class Graph(View):
             carrier_data['series'] = series
 
             data.append(carrier_data)
-
         return HttpResponse(json.dumps(data), content_type="application/json")

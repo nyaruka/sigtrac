@@ -1,0 +1,94 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+#header-bar {
+  position: relative;
+  z-index: 2;
+  margin-top: 50px;
+}
+
+.summary-header {
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100px;
+}
+
+#mtn-header {
+  background-image: url('../images/mtn_white_logo.png');
+  background-color: #fec325;
+}
+
+#tigo-header {
+  background-image: url('../images/tigo_white_logo.png');
+  background-color: #204497;
+}
+
+#airtel-header {
+  background-image: url('../images/airtel_white_logo.png');
+  background-color: #eb2026;
+}
+
+#body-bar {
+  z-index: 2;
+  margin-top: 20px;
+}
+
+.summary-body {
+  background-color: rgba(245, 245, 245, 0.9);
+  padding: 5px 15px;
+}
+
+.summary-body h1 {
+  font-size: 70px;
+}
+
+#mtn-body {
+  border: 1px solid #fec325;
+}
+
+#mtn-body h1 {
+  color: #fec325;
+}
+
+#tigo-body {
+  border: 1px solid #204497;
+}
+
+#tigo-body h1 {
+  color: #204497;
+}
+
+#airtel-body {
+  border: 1px solid #eb2026;
+}
+
+#time-buttons {
+  margin-top: 30px;
+}
+
+#airtel-body h1 {
+  color: #eb2026;
+}
+
+.body-label {
+  margin-top: 0;
+  padding-top: 0;
+  line-height: 10px;
+}
+
+.body-value {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}

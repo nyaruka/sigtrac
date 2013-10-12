@@ -1,5 +1,11 @@
 from settings_common import *
 
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+COMPRESS_ENABLED = True
+
+HOSTNAME = 'sigtrac.nyaruka.com'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -16,10 +22,10 @@ DATABASES = {
 
 DEBUG = True
 TEMPLATE_DEBUG = True
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 MANAGERS = ADMINS
-INSTALLED_APPS = INSTALLED_APPS + ('django_nose', 'debug_toolbar')
+INSTALLED_APPS = INSTALLED_APPS + ('gunicorn', 'raven.contrib.django.raven_compat')
 
 # static dir is different for prod
 # STATIC_URL = '/sitestatic/'

@@ -9,7 +9,7 @@ from datetime import timedelta
 import json
 
 class IndexView(SmartTemplateView):
-    template_name = 'public/public_index.haml'
+    template_name = 'public/public_index.html'
 
     def get_context_data(self, **kwargs):
 
@@ -37,5 +37,5 @@ class IndexView(SmartTemplateView):
 
             data.append(carrier_data)
 
-        return dict(data=data)
+        return dict()
 

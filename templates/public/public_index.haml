@@ -1,12 +1,89 @@
-%html
-  %head
-    %link{href:'{{STATIC_URL}}css/styles.css', rel:'stylesheet', type:'text/css'}
+{% extends "public/public_frame.html" %}
+
+{% block content %}
+
+#header-bar.row
+  .col-md-4
+    #mtn-header.summary-header
+  .col-md-4
+    #tigo-header.summary-header
+  .col-md-4
+    #airtel-header.summary-header
+
+#body-bar.row
+  .col-md-4
+    #mtn-body.summary-body
+      .row
+        .col-md-12
+          %h1.body-value.pull-right
+            [[averages.0.current.mtn.download_speed|number:0]]
+            %span.small kbps
+      .row
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.mtn.ping|number:0]]
+            %span.small ms
+
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.mtn.packets_dropped|number:0]]
+            %span.small %
+
+  .col-md-4
+    #tigo-body.summary-body
+      .row
+        .col-md-12
+          %h1.pull-right.body-value
+            [[averages.0.current.tigo.download_speed|number:0]]
+            %span.small kbps
+
+      .row
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.tigo.ping|number:0]]
+            %span.small ms
+
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.tigo.packets_dropped|number:0]]
+            %span.small %
+
+  .col-md-4
+    #airtel-body.summary-body
+      .row
+        .col-md-12
+          %h1.pull-right.body-value
+            [[averages.0.current.airtel.download_speed|number:0]]
+            %span.small kbps
+
+      .row
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.airtel.ping|number:0]]
+            %span.small ms
+
+        .col-md-6
+          %h2.pull-right.body-value
+            [[averages.0.current.airtel.packets_dropped|number:0]]
+            %span.small %
 
 
-  %body
-    YOUR INTERNET SUCKS
-    
-    #chart
+.row
+  .col-md-4.col-md-offset-4.text-center
+    #time-buttons.btn-group
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['hour'];">Hour</button>
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
+
+#chart
+
+#map.map
+
+<script src="//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js"></script>
+<script type='text/javascript'>
+var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
+</script>
+
 
 :css
   #chart {
@@ -14,8 +91,6 @@
     margin: auto;
   }
 
-<script src="{{ STATIC_URL }}/js/jquery-1.9.1.js"></script>
-<script src="{{ STATIC_URL }}/js/highcharts.js"></script>
 :javascript
   $(function () {
         $('#chart').highcharts({
@@ -67,3 +142,5 @@
             ]
         });
     });
+
+{% endblock %}

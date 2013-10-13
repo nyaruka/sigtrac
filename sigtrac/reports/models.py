@@ -33,7 +33,13 @@ class Report(models.Model):
     @classmethod
     def create(cls, report_form):
         # look up our carrier, or create it
-        (report_form['carrier'], created) = Carrier.objects.get_or_create(name=report_form['carrier'])
+        carrier = Carrier.objects.filter(key=report_form['carrier'])
+        if not carrier:
+            carrier = Carrier.objects.create(key=report_form['carrier'],
+                                             name=report_form['carrier'],
+                                             slug=report_form['carrier'])
+        else:
+            carrier = carrier[0]
 
         existing_device = Device.objects.filter(uuid=report_form['device'])
         if existing_device:

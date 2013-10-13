@@ -5,8 +5,14 @@
 
   %body
     YOUR INTERNET SUCKS
-
+    
     #chart
+
+:css
+  #chart {
+    width: 1000px;
+    margin: auto;
+  }
 
 <script src="{{ STATIC_URL }}/js/jquery-1.9.1.js"></script>
 <script src="{{ STATIC_URL }}/js/highcharts.js"></script>
@@ -14,7 +20,7 @@
   $(function () {
         $('#chart').highcharts({
             chart: {
-                type: 'spline'
+                type: 'area',
             },
             title: {
                 text: 'Download speed'

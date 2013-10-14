@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/airtel"
+    android:id="@+id/main_bg"
+    tools:context=".HomeActivity">
+
+    <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/carrier_logo"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/sigtrac_airtel"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Data"
+        android:id="@+id/avg_time"
+        android:textSize="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#fff"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/packets_lost"
+            android:layout_alignParentRight="true"
+            android:textSize="20dp"
+            android:textColor="#fff"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/avg_time"/>
+
+    <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/ping_icon"
+            android:layout_below="@+id/packets_lost"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/sigtrac_ping_icon"/>
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textStyle="bold"
+            android:id="@+id/speed"
+            android:textSize="100dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:onClick="speedTapped"
+            android:clickable="true"
+            android:textColor="#fff"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kbps"
+            android:id="@+id/kbps_label"
+            android:layout_alignRight="@+id/speed"
+            android:layout_marginTop="-15dp"
+            android:layout_marginRight="-10dp"
+            android:layout_below="@+id/speed"
+            android:textSize="20dp"
+            android:textColor="#fff"/>
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result posted to Sigtrac"
+            android:id="@+id/posted"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textColor="#fff"/>
+
+</RelativeLayout>

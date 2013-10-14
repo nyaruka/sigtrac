@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>SigTrac</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -24,10 +24,18 @@
   </head>
 
   <body ng-controller="MainCtrl">
-    <div class="container">
-      {% block content %}
-      {% endblock %}
+    <div id="wrap">
+      <div class="container">
+	{% block content %}
+	{% endblock %}
+      </div>
     </div>
+    <div id="footer">
+      {% block bottom %}
+      {% endblock %}
+
+    </div>
+
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -39,6 +47,8 @@
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
     </script>
+  </body>
 
-</body>
+  {% block extra-script %}
+  {% endblock %}
 </html>

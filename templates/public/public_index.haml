@@ -75,7 +75,6 @@
       <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
       <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
 
-#chart
 
 #map.map
 
@@ -85,47 +84,63 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
 </script>
 
 
+{% endblock content %}
+
+{% block bottom %}
+#chart
+{% endblock bottom %}
+
 :css
   #chart {
-    width: 1000px;
-    margin: auto;
+    height: 200px;
   }
+
+
+{% block extra-script %}
 
 :javascript
   $(function () {
         $('#chart').highcharts({
             chart: {
                 type: 'area',
+                height: 200
+            },
+            legend: {
+                enabled: false,
+            },
+            credits: {
+                enabled: false,
             },
             title: {
-                text: 'Download speed'
+                text: null,
             },
             xAxis: {
                 type: 'datetime',
                 dateTimeLabelFormats: { // don't display the dummy year
-                    month: '%e. %b',
-                    year: '%b'
+                    millisecond: '%H:%M',
                 }
             },
             yAxis: {
                 title: {
-                    text: 'Download speed(bps)'
+                    text: null
                 },
-                min: 0
+                min: 0,
+                linkedTo: 0,
             },
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' bps';
+                        'at ' + Highcharts.dateFormat('%H:%M', this.x) +' was '+ this.y +' kbps';
                 }
             },
 
             series: [
-               {% for msg_stat in data %}
+               {% for stats in time_data %}
                {
-               name: '{{msg_stat.carrier|safe}}',
+               name: '{{stats.carrier|safe}}',
+               color: '{{stats.color|safe}}',
                data: [
-               {% for elt in msg_stat.series %}
+               {% for elt in stats.series %}
                [
                {% for unit in elt %}
                {% if forloop.first %}Date.parse("{{ unit }}"){%else%}{{unit}}{% endif %}
@@ -143,4 +158,5 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
         });
     });
 
-{% endblock %}
+{% endblock extra-script %}
+

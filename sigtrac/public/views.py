@@ -18,24 +18,25 @@ class IndexView(SmartTemplateView):
         data = []
         for carrier in carriers:
             carrier_data = dict()
-            carrier_data['carrier'] = carrier.name
+            carrier_data['carrier'] = carrier.slug
+            carrier_data['color'] = "#" + carrier.color
 
-            start = timezone.now()
-            end = start - timedelta(hours=24)
+
+            end = timezone.now()
+            start = end - timedelta(hours=24)
 
             series = []
 
-            while start >= end:
-                reports = Report.objects.filter(carrier=carrier, created_on__range=[start-timedelta(hours=1), start]).aggregate(download_speed=Avg('download_speed'))
+            while start <= end:
+                reports = Report.objects.filter(carrier=carrier, created_on__range=[start, start+timedelta(hours=1)]).order_by('created_on').aggregate(download_speed=Avg('download_speed'))
                 if reports['download_speed']:
                     series.append([start.isoformat(),  reports['download_speed']])
-                else:
-                    series.append([start.isoformat(),  0])
-                start -= timedelta(hours=1)
+
+                start += timedelta(hours=1)
 
             carrier_data['series'] = series
 
             data.append(carrier_data)
 
-        return dict()
+        return dict(time_data=data)
 

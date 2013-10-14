@@ -8,6 +8,7 @@ class Carrier(SmartModel):
                             help_text="The friendly name for this carrier")
     slug = models.CharField(max_length=32, unique=True,
                             help_text="The slug used in the UI for this carrier")
-
+    color = models.CharField(max_length=6,
+                             help_text="The color code for this carrier")
     def __unicode__(self):
         return self.name

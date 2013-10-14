@@ -11,3 +11,5 @@ config/gen/
 config/settings.py
 ngapp
 sigtrac.db
+.DS_Store
+db/

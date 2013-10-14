@@ -1,6 +1,6 @@
+html,
 body {
-  margin: 0;
-  padding: 0;
+  height: 100%;
 }
 
 #map {
@@ -98,4 +98,26 @@ body {
 
 #mtn-body .small, #airtel-body .small, #tigo-body .small {
   font-size: 20px;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -200px;
+}
+
+#footer {
+  height: 200px;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+#footer {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
 }

@@ -35,11 +35,11 @@ class Report(models.Model):
         # look up our carrier, or create it
         carrier = Carrier.objects.filter(key=report_form['carrier'])
         if not carrier:
-            carrier = Carrier.objects.create(key=report_form['carrier'],
-                                             name=report_form['carrier'],
-                                             slug=report_form['carrier'])
+            report_form['carrier'] = Carrier.objects.create(key=report_form['carrier'],
+                                                            name=report_form['carrier'],
+                                                            slug=report_form['carrier'])
         else:
-            carrier = carrier[0]
+            report_form['carrier'] = carrier[0]
 
         existing_device = Device.objects.filter(uuid=report_form['device'])
         if existing_device:

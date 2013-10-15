@@ -12,6 +12,11 @@ class ReportCRUDL(SmartCRUDL):
     model = Report
     actions = ('create', 'read', 'update', 'delete', 'list')
 
+    class List(SmartListView):
+        fields = ('device', 'carrier', 'connection_type', 'download_speed', 'ping', 'packets_dropped', 'created_on')
+        default_order = ('-created_on', )
+        search_fields = ('carrier__name__icontains', 'connection_type__icontains')
+
 class ReportForm(forms.Form):
     device = forms.CharField(max_length=40)
     device_type = forms.CharField(max_length=3)
@@ -73,21 +78,21 @@ class Results(View):
         data = {}
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['hour'] = period_data
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['day'] = period_data
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['week'] = period_data
@@ -95,30 +100,3 @@ class Results(View):
 
         return HttpResponse(json.dumps([data]), content_type="application/json")
 
-class Graph(View):
-    def get(self, request, *args, **kwargs):
-        """
-        View to give the data for the graph
-        """
-
-        carriers = Carrier.objects.all()
-
-        data = []
-        for carrier in carriers:
-            carrier_data = dict()
-            carrier_data['carrier'] = carrier.name
-
-            start = timezone.now()
-            end = start - timedelta(hours=24)
-
-            series = []
-
-            while start >= end:
-                reports = Report.objects.filter(carrier=carrier, created_on__range=[start-timedelta(hours=1), start]).aggregate(download_speed=Avg('download_speed'))
-                series.append([start.isoformat(),  reports['download_speed']])
-                start -= timedelta(hours=1)
-
-            carrier_data['series'] = series
-
-            data.append(carrier_data)
-        return HttpResponse(json.dumps(data), content_type="application/json")

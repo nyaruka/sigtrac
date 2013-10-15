@@ -12,11 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75a52e92-a5fe-48aa-88dc-68f5701deff2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sigtrac/src/main/res/drawable-hdpi/ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sigtrac/src/main/res/drawable-mdpi/ic_launcher.png" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sigtrac/src/main/res/drawable-xhdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/sigtrac/src/main/res/drawable-xhdpi/ic_launcher.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sigtrac/src/main/java/com/nyaruka/sigtrac/PingService.java" afterPath="$PROJECT_DIR$/sigtrac/src/main/java/com/nyaruka/sigtrac/PingService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sigtrac/Sigtrac.iml" afterPath="$PROJECT_DIR$/sigtrac/Sigtrac.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Sigtrac.iws" />
@@ -35,7 +31,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -72,6 +67,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -123,7 +119,7 @@
       <file leaf-file-name="PingService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sigtrac/src/main/java/com/nyaruka/sigtrac/PingService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="124" column="31" selection-start="4205" selection-end="4205" vertical-scroll-proportion="0.3970588" vertical-offset="1260" max-vertical-offset="4170">
+            <state line="164" column="89" selection-start="5536" selection-end="5536" vertical-scroll-proportion="-1.367647" vertical-offset="2460" max-vertical-offset="4170">
               <folding />
             </state>
           </provider>
@@ -132,7 +128,7 @@
       <file leaf-file-name="Sigtrac.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sigtrac/src/main/java/com/nyaruka/sigtrac/Sigtrac.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="96" selection-start="1252" selection-end="1252" vertical-scroll-proportion="0.0" vertical-offset="660" max-vertical-offset="1170">
+            <state line="44" column="96" selection-start="1252" selection-end="1252" vertical-scroll-proportion="0.0" vertical-offset="660" max-vertical-offset="1290">
               <folding />
             </state>
           </provider>
@@ -564,8 +560,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -574,8 +568,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sigtrac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Sigtrac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sigtrac" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -595,6 +615,9 @@
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="FullScreen" value="false" />
+    <property name="project.structure.last.edited" value="Android SDK" />
+    <property name="project.structure.proportion" value="0.20605469" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -934,11 +957,98 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sigtrac/src/main/java/com/nyaruka/sigtrac/PingService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="31" selection-start="4205" selection-end="4205" vertical-scroll-proportion="0.3970588" vertical-offset="1260" max-vertical-offset="4170">
+        <state line="164" column="89" selection-start="5536" selection-end="5536" vertical-scroll-proportion="-1.367647" vertical-offset="2460" max-vertical-offset="4170">
           <folding />
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Android</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>android</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>ComAndroidSupportAppcompatV71800.aar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
 

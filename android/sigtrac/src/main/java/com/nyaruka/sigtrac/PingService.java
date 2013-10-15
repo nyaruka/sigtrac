@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 public class PingService extends IntentService {
 
-    private static final String DOWNLOAD_FILE = "http://speedtest.london.linode.com/100MB-london.bin";
+    private static final String DOWNLOAD_FILE = "http://speedtest.newark.linode.com/100MB-newark.bin";
 
     private PhoneStateListener m_signalListener;
     private SignalStrength m_lastSignal;
@@ -118,7 +118,7 @@ public class PingService extends IntentService {
         try {
             long start = System.currentTimeMillis();
 
-            URLConnection connection = new URL(url).openConnection();
+            URLConnection connection = new URL(url + "?" + start).openConnection();
             InputStream is = connection.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
 

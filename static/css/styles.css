@@ -128,7 +128,7 @@ body {
 
 @media(min-width:992px){
   .big-label {
-      line-height: 140px;
+      line-height: 70px;
       text-align: left;
   }
 }

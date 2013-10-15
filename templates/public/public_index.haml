@@ -115,7 +115,8 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
             chart: {
                 backgroundColor: null,
                 type: 'column',
-                height: 200
+                height: 200,
+                marginBottom: 1
             },
             plotOptions: {
                 column: {
@@ -135,8 +136,8 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
             },
             xAxis: {
                 type: 'datetime',
-                dateTimeLabelFormats: { // don't display the dummy year
-                    millisecond: '%H:%M',
+                labels: {
+                    enabled: false,
                 }
             },
             yAxis: {

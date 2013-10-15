@@ -107,6 +107,13 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
                 height: 200,
                 marginBottom: 1
             },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0,
+                    pointWidth: 13
+                }
+            },
             legend: {
                 enabled: false,
             },
@@ -141,6 +148,7 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
                {
                name: '{{stats.carrier|safe}}',
                color: '{{stats.color|safe}}',
+               pointWidth: 12,
                data: [
                {% for elt in stats.series %}
                [

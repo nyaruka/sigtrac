@@ -31,7 +31,7 @@ class IndexView(SmartTemplateView):
             while start <= end:
                 reports = Report.objects.filter(carrier=carrier, created_on__range=[start, start+timedelta(hours=1)]).order_by('created_on').aggregate(download_speed=Avg('download_speed'))
                 if reports['download_speed'] is not None:
-                    series.append([start.isoformat(),  reports['download_speed']])
+                    series.append([start.strftime('%Y-%m-%dT%H:%M:%S.%f-0200'),  reports['download_speed']])
 
                 start += timedelta(hours=1)
 

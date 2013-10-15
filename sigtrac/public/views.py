@@ -22,7 +22,8 @@ class IndexView(SmartTemplateView):
             carrier_data['color'] = "#" + carrier.color
 
 
-            end = timezone.now()
+            end = timezone.now() + timedelta(hours=1)
+            end = end.replace(minute=0, second=0, microsecond=0)
             start = end - timedelta(hours=24)
 
             series = []

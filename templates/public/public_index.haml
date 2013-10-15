@@ -138,7 +138,7 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
             tooltip: {
                 formatter: function() {
                         return '<b>'+ this.series.name +'</b><br/>'+
-                        'at ' + Highcharts.dateFormat('%H:%M', this.x) +' was '+ this.y +' kbps';
+                        'was ' + this.y + ' kbps' + ' at ' + Highcharts.dateFormat('%H:%M', this.x);
                 }
             },
 

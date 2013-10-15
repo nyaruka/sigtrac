@@ -2,80 +2,78 @@
 
 {% block content %}
 
-#header-bar.row
-  .col-md-4
-    #mtn-header.summary-header
-  .col-md-4
-    #tigo-header.summary-header
-  .col-md-4
-    #airtel-header.summary-header
-
 #body-bar.row
-  .col-md-4
+  .col-sm-4
+    #mtn-header.summary-header
     #mtn-body.summary-body
       .row
-        .col-md-12
-          %h1.body-value.pull-right
+        .col-md-9.right-padding-5
+          %h1.body-value.big-value
             [[averages.0.current.mtn.download_speed|number:0]]
-            %span.small kbps
+        .col-md-3.left-padding-5
+          .big-label kbps
       .row
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.mtn.ping|number:0]]
             %span.small ms
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.mtn.packets_dropped|number:0]]
             %span.small %
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.mtn.report_count|number:0]] / [[ averages.0.current.mtn.device_count|number:0]]
 
-  .col-md-4
+  .col-sm-4
+    #tigo-header.summary-header
     #tigo-body.summary-body
       .row
-        .col-md-12
-          %h1.pull-right.body-value
+        .col-md-9.right-padding-5
+          %h1.body-value.big-value
             [[averages.0.current.tigo.download_speed|number:0]]
-            %span.small kbps
+        .col-md-3.left-padding-5
+          .big-label kbps
 
       .row
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.tigo.ping|number:0]]
             %span.small ms
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.tigo.packets_dropped|number:0]]
             %span.small %
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.tigo.report_count|number:0]] / [[ averages.0.current.tigo.device_count|number:0]]
 
-  .col-md-4
+  .col-sm-4
+    #airtel-header.summary-header
     #airtel-body.summary-body
       .row
-        .col-md-12
-          %h1.pull-right.body-value
+        .col-md-9.right-padding-5
+          %h1.body-value.big-value
             [[averages.0.current.airtel.download_speed|number:0]]
-            %span.small kbps
+        .col-md-3.left-padding-5
+          .big-label kbps
 
       .row
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.airtel.ping|number:0]]
             %span.small ms
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.airtel.packets_dropped|number:0]]
             %span.small %
 
-        .col-md-4
+        .col-xs-4
           %h2.pull-right.body-value
             [[averages.0.current.airtel.report_count|number:0]] / [[ averages.0.current.airtel.device_count|number:0]]
 
@@ -86,6 +84,8 @@
       <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
       <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
 
+.row
+  #chart-spacer
 
 #map.map
 

@@ -80,11 +80,13 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Result posted to Sigtrac"
+            android:text="@string/posted"
             android:id="@+id/posted"
+            android:linksClickable="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:textSize="20dp"
+            android:autoLink="web"
             android:textColor="#fff"/>
 
 </RelativeLayout>

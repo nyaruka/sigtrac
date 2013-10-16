@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Speed Test</string>
+    <string name="app_name">BitRanks</string>
+    <string name="posted"><![CDATA[Result posted to BitRanks.com]]></string>
 </resources>
+

@@ -209,7 +209,7 @@ public class PingService extends IntentService {
         // TODO: write these to a file first before posting in case there's no internet
 
         HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://sigtrac.nyaruka.com/submit");
+        HttpPost post = new HttpPost("http://bitranks.com/submit");
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);

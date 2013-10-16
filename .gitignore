@@ -13,4 +13,5 @@ ngapp
 sigtrac.db
 .DS_Store
 db/*
-
+.gradle
+.idea/workspace.xml

@@ -1,6 +1,6 @@
 config = dict( 
    port='8009',
-   friendly_name='SigTrac',
+   friendly_name='BitRanks',
    app_dir='sigtrac',
    name='sigtrac',
    user='sigtrac',

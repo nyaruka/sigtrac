@@ -4,7 +4,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 COMPRESS_ENABLED = True
 
-HOSTNAME = 'sigtrac.nyaruka.com'
+HOSTNAME = 'bitranks.com'
 
 DATABASES = {
     'default': {

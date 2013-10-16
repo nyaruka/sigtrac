@@ -13,6 +13,7 @@ repositories {
 }
 
 android {
+
     compileSdkVersion 18
     buildToolsVersion "18.0.1"
 
@@ -24,14 +25,30 @@ android {
     signingConfigs {
         release {
             storeFile file('../android.keystore')
-            storePassword System.console().readLine("\n\$ Enter keystore password: ")
             keyAlias = "sigtrac"
-            keyPassword System.console().readLine("\n\$ Enter key password: ")
+            //def pw = System.console().readLine("\n\$ Enter keystore password: ")
+            //storePassword pw
+            //keyPassword pw
         }
     }
-    
+
     buildTypes {
+
+        ext.env = System.getenv()
+        def secret = env.BITRANKS_SECRET
+        if (secret == null) {
+            secret = 'sigtrac_secret_change_me';
+        }
+
+        //println("WHAT the WHAT ${secret}")
+
+        debug {
+            buildConfig "public final static String SECRET = \"${secret}\";"
+            // signingConfig signingConfigs.debug
+        }
+
         release {
+            buildConfig "public final static String SECRET = \"${secret}\";"
             signingConfig signingConfigs.release
         }
     }
@@ -40,3 +57,4 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:18.0.0'
 }
+

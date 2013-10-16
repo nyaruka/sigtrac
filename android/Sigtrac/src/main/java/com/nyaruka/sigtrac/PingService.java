@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,10 +24,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -184,6 +190,14 @@ public class PingService extends IntentService {
         }
     }
 
+    public String computeHash(String secret, String input) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(new SecretKeySpec((secret).getBytes(), "ASCII"));
+        mac.update(input.getBytes("UTF-8"));
+        byte[] byteData = mac.doFinal();
+        return Base64.encodeToString(byteData, Base64.URL_SAFE).trim();
+    }
+
     public void postData(PingResults ping, int kbps) {
 
         if (ping == null || !ping.isValid()) {
@@ -209,12 +223,12 @@ public class PingService extends IntentService {
         // TODO: write these to a file first before posting in case there's no internet
 
         HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://bitranks.com/submit");
 
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("device", deviceId));
             nameValuePairs.add(new BasicNameValuePair("carrier", manager.getSimOperatorName()));
+            nameValuePairs.add(new BasicNameValuePair("country", manager.getSimCountryIso()));
             nameValuePairs.add(new BasicNameValuePair("device_build", Build.MANUFACTURER + ";" + Build.MODEL));
             nameValuePairs.add(new BasicNameValuePair("device_type", "AND"));
             nameValuePairs.add(new BasicNameValuePair("connection_type", cm.getActiveNetworkInfo().getSubtypeName()));
@@ -224,16 +238,29 @@ public class PingService extends IntentService {
             nameValuePairs.add(new BasicNameValuePair("signal_strength_asu", "" + m_lastSignal.getGsmSignalStrength()));
             nameValuePairs.add(new BasicNameValuePair("signal_strength_dbm", "" +  ((2 * m_lastSignal.getGsmSignalStrength())-113)));
 
+
             if (m_currentLocation != null) {
                 nameValuePairs.add(new BasicNameValuePair("latitude", "" + m_currentLocation.m_lat));
                 nameValuePairs.add(new BasicNameValuePair("longitude", "" + m_currentLocation.m_lng));
             }
 
-            nameValuePairs.add(new BasicNameValuePair("created_on", "" + (new Date().getTime() / 1000)));
-            post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-            String entity = EntityUtils.toString(post.getEntity());
-            Log.d(Sigtrac.TAG, entity);
+            long created = System.currentTimeMillis() / 1000;
+            nameValuePairs.add(new BasicNameValuePair("created_on", "" + created));
+
+            String url = "http://bitranks.com/submit";
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
+            String entityString = EntityUtils.toString(entity);
+            if (BuildConfig.SECRET != null){
+                Log.d(Sigtrac.TAG, "Signing with " + BuildConfig.SECRET);
+                String signature = computeHash(BuildConfig.SECRET+created, entityString);
+                url += "?s=" + URLEncoder.encode(signature);
+            }
+            Log.d(Sigtrac.TAG, "URL: " + url);
+
+            HttpPost post = new HttpPost(url);
+            post.setEntity(entity);
+            Log.d(Sigtrac.TAG, entityString);
 
             // Execute HTTP Post Request
             HttpResponse response = client.execute(post);

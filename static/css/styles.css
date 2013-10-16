@@ -149,6 +149,75 @@ body {
   margin: 0 auto -200px;
 }
 
+
+#chart {
+  height: 200px;
+}
+
+.download {
+  margin-top:70px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.note {
+  font-size: 11px;
+  color: #999;
+  padding-top:5px;
+}
+
+.chart-tooltip .label-speed {
+  font-size:22px;
+  font-weight:bold;
+  display:inline-block;
+  margin-bottom:8px;
+}
+
+.chart-tooltip .units {
+  display:inline-block;
+  margin-left:0px;
+  color: #fff;
+}
+
+.chart-tooltip .time {
+  color: #fff;
+}
+
+.chart-tooltip {
+  margin:-10px;
+  padding:8px;
+  border: 2px solid #fff;
+  min-width: 120px;
+}
+
+.chart-tooltip .label-speed {
+  color: #fff;
+}
+
+.chart-tooltip.carrier {
+  background-size: 40px Auto;
+  background-repeat:no-repeat;
+  background-position: 85% 85%;
+}
+
+.chart-tooltip.airtel {
+  background-color:#eb2026;
+  background-image: url('../images/airtel_white_logo.png');
+}
+
+.chart-tooltip.mtn {
+  background-color:#fec325;
+  background-image: url('../images/mtn_white_logo.png');
+}
+
+.chart-tooltip.tigo {
+  background-color:#204497;
+  background-image: url('../images/tigo_white_logo.png');
+}
+
+
+
 #footer {
   height: 200px;
 }

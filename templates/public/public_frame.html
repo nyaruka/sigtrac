@@ -21,6 +21,11 @@
     <script src="{{ STATIC_URL }}js/angular-resource.js"></script>
     <script src="{{ STATIC_URL }}js/sigtrac.js"></script>
     <script src="{{ STATIC_URL }}/js/highcharts.js"></script>
+
+    {% block extra-style %}
+
+    {% endblock %}
+
   </head>
 
   <body ng-controller="MainCtrl">

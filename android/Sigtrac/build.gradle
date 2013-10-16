@@ -22,17 +22,17 @@ android {
     }
 
     signingConfigs {
-        /*release {
+        release {
             storeFile file('../android.keystore')
             storePassword System.console().readLine("\n\$ Enter keystore password: ")
             keyAlias = "sigtrac"
             keyPassword System.console().readLine("\n\$ Enter key password: ")
-        }*/
+        }
     }
     
     buildTypes {
         release {
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
 }

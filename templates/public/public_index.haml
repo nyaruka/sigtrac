@@ -2,6 +2,14 @@
 
 {% block content %}
 
+.row
+  .col-md-4.col-md-offset-4.text-center
+    #time-buttons.btn-group
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['hour'];">Hour</button>
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
+      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
+
+
 #body-bar.row
   .col-sm-4
     #mtn-header.summary-header
@@ -78,11 +86,13 @@
             [[averages.0.current.airtel.report_count|number:0]] / [[ averages.0.current.airtel.device_count|number:0]]
 
 .row
-  .col-md-4.col-md-offset-4.text-center
-    #time-buttons.btn-group
-      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['hour'];">Hour</button>
-      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
-      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
+  .col-md-4.col-md-offset-4.text-center.download
+    Got an Android phone?
+    %br
+    <a href="https://play.google.com/store/apps/details?id=com.nyaruka.sigtrac">Download the app</a>.
+    .note
+      BitRanks runs periodically throughout the day. Make sure you have an unmetered data bundle before installing.
+
 
 .row
   #chart-spacer
@@ -101,11 +111,9 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
 #chart
 {% endblock bottom %}
 
-:css
-  #chart {
-    height: 200px;
-  }
-
+-block extra-style
+  {{block.super}}
+  :css
 
 {% block extra-script %}
 
@@ -148,9 +156,11 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
                 linkedTo: 0,
             },
             tooltip: {
+                useHTML:true,
                 formatter: function() {
-                        return '<b>'+ this.series.name +'</b><br/>'+
-                        'was ' + this.y + ' kbps' + ' at ' + Highcharts.dateFormat('%H:%M', this.x);
+                        console.log(this.series.name);
+                        return '<div class="chart-tooltip carrier ' + this.series.name + '">'+
+                        '<div class=label-speed>' + Math.floor(this.y).toLocaleString() + '</div><div class=units>kbps</div>' + '<div class=time>' + Highcharts.dateFormat('%H:%M', this.x) + '</div></div>';
                 }
             },
 

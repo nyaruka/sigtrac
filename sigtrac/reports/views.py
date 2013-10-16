@@ -78,25 +78,31 @@ class Results(View):
         data = {}
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'),
+                                            download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
+                                            report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['hour'] = period_data
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'),
+                                            download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
+                                            report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['day'] = period_data
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'), download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'), report_count=Count('id'), device_count=Count('device__id', distinct=True))
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'),
+                                            download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
+                                            report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
 
         data['week'] = period_data
-        data['current'] = data['week']
+        data['current'] = data['day']
 
         return HttpResponse(json.dumps([data]), content_type="application/json")
 

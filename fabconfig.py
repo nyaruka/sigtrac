@@ -9,6 +9,6 @@ config = dict(
    db='sigtrac',
    db_user='sigtrac',
    db_host='localhost',
-   custom_domains='sigtrac.nyaruka.com',
+   custom_domains='sigtrac.nyaruka.com www.bitranks.com bitranks.com',
 #   compress=True,
    celery=True)

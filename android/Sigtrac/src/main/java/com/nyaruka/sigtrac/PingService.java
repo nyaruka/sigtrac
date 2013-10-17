@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -225,6 +227,9 @@ public class PingService extends IntentService {
         HttpClient client = new DefaultHttpClient();
 
         try {
+
+            PackageInfo info  = getPackageManager().getPackageInfo(getPackageName(), 0);
+
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("device", deviceId));
             nameValuePairs.add(new BasicNameValuePair("carrier", manager.getSimOperatorName()));
@@ -237,7 +242,7 @@ public class PingService extends IntentService {
             nameValuePairs.add(new BasicNameValuePair("packets_dropped", "" + ping.pctLost));
             nameValuePairs.add(new BasicNameValuePair("signal_strength_asu", "" + m_lastSignal.getGsmSignalStrength()));
             nameValuePairs.add(new BasicNameValuePair("signal_strength_dbm", "" +  ((2 * m_lastSignal.getGsmSignalStrength())-113)));
-
+            nameValuePairs.add(new BasicNameValuePair("version", "" + info.versionCode));
 
             if (m_currentLocation != null) {
                 nameValuePairs.add(new BasicNameValuePair("latitude", "" + m_currentLocation.m_lat));
@@ -248,18 +253,18 @@ public class PingService extends IntentService {
             long created = System.currentTimeMillis() / 1000;
             nameValuePairs.add(new BasicNameValuePair("created_on", "" + created));
 
+            // String url = "http://192.168.0.108:8000/submit";
             String url = "http://bitranks.com/submit";
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             String entityString = EntityUtils.toString(entity);
-            if (BuildConfig.SECRET != null){
+            if (BuildConfig.SECRET != null) {
                 Sigtrac.log("Signing with " + BuildConfig.SECRET);
                 String signature = computeHash(BuildConfig.SECRET+created, entityString);
-                url += "?s=" + URLEncoder.encode(signature);
+                url += "?" + entityString + "&s=" + URLEncoder.encode(signature);
             }
             Sigtrac.log("URL: " + url);
 
             HttpPost post = new HttpPost(url);
-            post.setEntity(entity);
             Sigtrac.log(entityString);
 
             // Execute HTTP Post Request

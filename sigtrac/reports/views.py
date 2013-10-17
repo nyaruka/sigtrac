@@ -1,4 +1,8 @@
+import base64
+import hashlib
+import hmac
 import json
+import re
 from django.views.decorators.csrf import csrf_exempt
 from smartmin.views import *
 from .models import *
@@ -57,7 +61,32 @@ class SubmitHandler(View):
           longitude: 1.1515,
           created_on: 15815881585
         """
-        form = ReportForm(request.POST)
+
+        if 'connection_type' in request.POST:
+            form = ReportForm(request.POST)
+        else:
+            # use a query string instead since order is important for signing
+            form = ReportForm(request.GET)
+
+        # for now, we'll accept anything under version 4
+        # but this will soon be enforced once our clients upgrade
+        if 'version' in request.GET and int(request.GET['version']) > 4:
+            sig = request.GET['s']
+            qs = request.META['QUERY_STRING']
+            time = request.GET['created_on']
+
+            # trim off the signature
+            qs = re.sub('&s=.*$', '', qs)
+
+            # sign the request
+            signature = hmac.new(key=str(settings.BITRANKS_SECRET + time), msg=bytes(qs), digestmod=hashlib.sha256).digest()
+
+            # base64 and url sanitize
+            signature = base64.urlsafe_b64encode(signature).strip()
+
+            if signature != sig:
+                return HttpResponse("Invalid signature: " + sig)
+
         if not form.is_valid():
             return HttpResponse("Invalid report: %s" % ",".join([str(e) for e in form.errors]))
 

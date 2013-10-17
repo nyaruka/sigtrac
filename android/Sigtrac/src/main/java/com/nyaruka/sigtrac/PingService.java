@@ -10,6 +10,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
@@ -100,11 +101,21 @@ public class PingService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
         Sigtrac sigtrac = (Sigtrac)getApplication();
         sigtrac.setPingResults(null);
         sigtrac.setKbps(-1);
-
+        sigtrac.setWifi(false);
         sigtrac.setRunning(true);
+
+        if (wifi.isConnected()) {
+            Sigtrac.log("Wifi connected, not running test");
+            sigtrac.setWifi(true);
+            return;
+        }
+
 
         updateLocation();
         String host = intent.getStringExtra(HomeActivity.EXTRA_HOST);

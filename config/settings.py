@@ -34,4 +34,4 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 CELERY_ALWAYS_EAGER = True
 BROKER_BACKEND = 'memory'
-
+BITRANKS_SECRET = '${bitranks_secret}'

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -25,22 +26,21 @@ public class HomeActivity extends Activity {
     private BroadcastReceiver m_receiver;
 
 
-    private void setCarrier(String carrier) {
-        Sigtrac.log( "Setting carrier: " + carrier);
-        if (carrier != null) {
-            if (carrier.indexOf("MTN") > -1) {
+    private void setCarrier(String carrierName, String carrierCode) {
+        Sigtrac.log("Setting carrier: " + carrierName + " (" + carrierCode + ")");
+        if (carrierCode != null) {
+            if (carrierCode.equals("63510")) { // MTN
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.mtn));
                 ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_mtn));
-            } else if (carrier.indexOf("Tigo") > -1 || carrier.equals("63513")) {
+            } else if (carrierCode.equals("63513")) { // Tigo
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.tigo));
                 ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_tigo));
-            } else if (carrier.indexOf("Airtel") > -1) {
+            } else if (carrierCode.equals("63514")) { // Airtel
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.airtel));
                 ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_airtel));
             }
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.home);
 
         TelephonyManager tele = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        setCarrier(tele.getSimOperatorName());
+        setCarrier(tele.getSimOperatorName(), tele.getSimOperator());
         m_receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -86,7 +86,9 @@ public class HomeActivity extends Activity {
                     HomeActivity.this.findViewById(R.id.posted).setVisibility(View.VISIBLE);
                 }
 
-                // startPing();
+                if (sigtrac.isWifi()) {
+                    Toast.makeText(HomeActivity.this, "Sorry, can't run mobile network test while connected to wifi", Toast.LENGTH_SHORT).show();
+                }
             }
         };
     }
@@ -95,8 +97,6 @@ public class HomeActivity extends Activity {
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((m_receiver), new IntentFilter(PING_RESULT));
-
-        // startPing();
     }
 
     @Override

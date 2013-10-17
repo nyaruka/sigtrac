@@ -18,6 +18,7 @@ public class Sigtrac extends Application {
     public PingService.PingResults m_pingResults;
     private boolean m_running;
     private int m_kbps;
+    private boolean m_wifi;
 
     @Override
     public void onCreate() {
@@ -70,6 +71,15 @@ public class Sigtrac extends Application {
 
     public int getKbps() {
         return m_kbps;
+    }
+
+    public void setWifi(boolean wifi) {
+        m_wifi = wifi;
+        invalidateUI();
+    }
+
+    public boolean isWifi() {
+        return m_wifi;
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {

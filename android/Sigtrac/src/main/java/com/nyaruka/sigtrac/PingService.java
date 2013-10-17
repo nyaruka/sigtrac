@@ -114,7 +114,7 @@ public class PingService extends IntentService {
         }
 
         downloadFile(DOWNLOAD_FILE);
-        Log.d(Sigtrac.TAG, "Location: " + m_currentLocation);
+        Sigtrac.log("Location: " + m_currentLocation);
         postData(ping, sigtrac.getKbps());
         sigtrac.setRunning(false);
 
@@ -143,7 +143,7 @@ public class PingService extends IntentService {
 
                 // for now just run the test for 15 seconds
                 if ((System.currentTimeMillis() - start) > 15000) {
-                    Log.d(Sigtrac.TAG, "Test is complete, bailing");
+                    Sigtrac.log("Test is complete, bailing");
                     break;
                 }
                 i++;
@@ -160,7 +160,7 @@ public class PingService extends IntentService {
 
     private PingResults pingHost(String host, int count) {
 
-        Log.d(Sigtrac.TAG, "Pinging " + host);
+        Sigtrac.log("Pinging " + host);
 
         try {
             Process process = new ProcessBuilder()
@@ -201,12 +201,12 @@ public class PingService extends IntentService {
     public void postData(PingResults ping, int kbps) {
 
         if (ping == null || !ping.isValid()) {
-            Log.d(Sigtrac.TAG, "Invalid ping, skipping");
+            Sigtrac.log("Invalid ping, skipping");
             return;
         }
 
         if (m_lastSignal == null) {
-            Log.d(Sigtrac.TAG, "No signal, skipping");
+            Sigtrac.log("No signal, skipping");
             return;
         }
 
@@ -252,19 +252,19 @@ public class PingService extends IntentService {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             String entityString = EntityUtils.toString(entity);
             if (BuildConfig.SECRET != null){
-                Log.d(Sigtrac.TAG, "Signing with " + BuildConfig.SECRET);
+                Sigtrac.log("Signing with " + BuildConfig.SECRET);
                 String signature = computeHash(BuildConfig.SECRET+created, entityString);
                 url += "?s=" + URLEncoder.encode(signature);
             }
-            Log.d(Sigtrac.TAG, "URL: " + url);
+            Sigtrac.log("URL: " + url);
 
             HttpPost post = new HttpPost(url);
             post.setEntity(entity);
-            Log.d(Sigtrac.TAG, entityString);
+            Sigtrac.log(entityString);
 
             // Execute HTTP Post Request
             HttpResponse response = client.execute(post);
-            Log.d(Sigtrac.TAG, "Response: " + EntityUtils.toString(response.getEntity()));
+            Sigtrac.log("Response: " + EntityUtils.toString(response.getEntity()));
 
         } catch (Throwable t) {
             Log.e(Sigtrac.TAG, "Failed post", t);
@@ -290,7 +290,7 @@ public class PingService extends IntentService {
 
             String[] lines = results.split("\n");
             for (String line : lines) {
-                Log.d(Sigtrac.TAG, line);
+                Sigtrac.log(line);
                 Matcher matcher = timePattern.matcher(line);
                 if (matcher.find()) {
                     min = new BigDecimal(matcher.group(1));

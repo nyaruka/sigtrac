@@ -26,7 +26,7 @@ public class HomeActivity extends Activity {
 
 
     private void setCarrier(String carrier) {
-        Log.d(Sigtrac.TAG, "Setting carrier: " + carrier);
+        Sigtrac.log( "Setting carrier: " + carrier);
         if (carrier != null) {
             if (carrier.indexOf("MTN") > -1) {
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.mtn));

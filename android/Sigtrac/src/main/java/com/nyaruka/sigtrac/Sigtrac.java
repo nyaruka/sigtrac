@@ -25,6 +25,12 @@ public class Sigtrac extends Application {
         setAlarm();
     }
 
+    public static void log(String message) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, message);
+        }
+    }
+
     public void invalidateUI() {
         // notify about the update
         Intent result = new Intent(HomeActivity.PING_RESULT);
@@ -57,7 +63,7 @@ public class Sigtrac extends Application {
     }
 
     public void setKbps(int kbps) {
-        Log.d(TAG, kbps + " Kbps");
+        Sigtrac.log(kbps + " Kbps");
         m_kbps = kbps;
         invalidateUI();
     }

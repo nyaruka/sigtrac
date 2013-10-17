@@ -26,9 +26,9 @@ android {
         release {
             storeFile file('../android.keystore')
             keyAlias = "sigtrac"
-            //def pw = System.console().readLine("\n\$ Enter keystore password: ")
-            //storePassword pw
-            //keyPassword pw
+            def pw = System.console().readLine("\n\$ Enter keystore password: ")
+            storePassword pw
+            keyPassword pw
         }
     }
 
@@ -40,11 +40,8 @@ android {
             secret = 'sigtrac_secret_change_me';
         }
 
-        //println("WHAT the WHAT ${secret}")
-
         debug {
             buildConfig "public final static String SECRET = \"${secret}\";"
-            // signingConfig signingConfigs.debug
         }
 
         release {

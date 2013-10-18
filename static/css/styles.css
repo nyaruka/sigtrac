@@ -188,7 +188,7 @@ body {
   margin:-10px;
   padding:8px;
   border: 2px solid #fff;
-  min-width: 120px;
+  min-width: 190px;
 }
 
 .chart-tooltip .label-speed {
@@ -196,9 +196,9 @@ body {
 }
 
 .chart-tooltip.carrier {
-  background-size: 40px Auto;
+  background-size: 55px Auto;
   background-repeat:no-repeat;
-  background-position: 85% 85%;
+  background-position: 95% 57%;
 }
 
 .chart-tooltip.airtel {
@@ -212,6 +212,7 @@ body {
 }
 
 .chart-tooltip.tigo {
+  background-size: 35px Auto;
   background-color:#204497;
   background-image: url('../images/tigo_white_logo.png');
 }

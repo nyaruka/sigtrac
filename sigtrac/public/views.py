@@ -5,6 +5,7 @@ from sigtrac.carriers.models import Carrier
 from sigtrac.reports.models import Report
 from django.db.models import Avg
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 from datetime import timedelta
 import json
 
@@ -24,7 +25,7 @@ class IndexView(SmartTemplateView):
 
             end = timezone.now() + timedelta(hours=1)
             end = end.replace(minute=0, second=0, microsecond=0)
-            start = end - timedelta(hours=24)
+            start = end - timedelta(hours=120)
 
             series = []
 
@@ -41,3 +42,33 @@ class IndexView(SmartTemplateView):
 
         return dict(time_data=data)
 
+class Series(View):
+    def get(self, request, *args, **kwargs):
+        """
+        Public view, 1mo time series, hourly ave bandwidth per carrier
+        """
+        time_series = {}
+        # d is the length of the x axis, interval is the distance between points
+        deltas = [{'name': 'hour', 'd': timedelta(hours=1), 'interval': timedelta(minutes=5)}, 
+                  {'name': 'day', 'd': timedelta(days=1), 'interval': timedelta(hours=1)},
+                  {'name': 'week', 'd': timedelta(days=7), 'interval': timedelta(hours=3)}]
+        for delta in deltas:
+            time_series[delta['name']] = {}
+            for carrier in Carrier.objects.all():
+                time_series[delta['name']][carrier.slug] = self.get_time_series(carrier, delta)
+
+        return HttpResponse(json.dumps(time_series), content_type="application/json")
+
+    def get_time_series(self, carrier, delta): 
+        end = timezone.now() + timedelta(hours=1)
+        end = end.replace(minute=0, second=0, microsecond=0)
+        start = end - delta['d']
+        series = []
+
+        while start <= end:
+            reports = carrier.report_set.filter(carrier=carrier, created_on__range=[start, start+delta['interval']]).order_by('created_on').aggregate(download_speed=Avg('download_speed'))
+            if reports['download_speed'] is not None:
+                series.append([start.strftime('%Y-%m-%dT%H:%M:%S.%f-0200'), reports['download_speed']])
+            start += delta['interval']
+
+        return series

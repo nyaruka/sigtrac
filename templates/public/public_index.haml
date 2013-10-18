@@ -5,9 +5,9 @@
 .row
   .col-md-4.col-md-offset-4.text-center
     #time-buttons.btn-group
-      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['hour'];">Hour</button>
-      <button class="btn btn-default" type="button" autofocus="true" ng-click="averages[0]['current'] = averages[0]['day'];">Day</button>
-      <button class="btn btn-default" type="button" ng-click="averages[0]['current'] = averages[0]['week'];">Week</button>
+      <button class="btn btn-default" ng-class="{active: currentDelta == 'hour'}" type="button" ng-click="setDelta('hour');">Hour</button>
+      <button class="btn btn-default" ng-class="{active: currentDelta == 'day'}" type="button" ng-click="setDelta('day');">Day</button>
+      <button class="btn btn-default" ng-class="{active: currentDelta == 'week'}" type="button" ng-click="setDelta('week');">Week</button>
 
 
 #body-bar.row
@@ -93,7 +93,6 @@
     .note
       BitRanks runs periodically throughout the day. Make sure you have an unmetered data bundle before installing.
 
-
 .row
   #chart-spacer
 
@@ -108,7 +107,7 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
 {% endblock content %}
 
 {% block bottom %}
-#chart
+<highchart id="chart" config="chartConfig"></highchart>
 {% endblock bottom %}
 
 -block extra-style
@@ -117,77 +116,4 @@ var map = L.mapbox.map('map', 'thebenedict.map-hb5e1j6u');
 
 {% block extra-script %}
 
-:javascript
-  $(function () {
-        $('#chart').highcharts({
-            chart: {
-                backgroundColor: null,
-                type: 'column',
-                height: 200,
-                marginBottom: 1
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0,
-                    borderWidth: 0,
-                    pointWidth: 13
-                }
-            },
-            legend: {
-                enabled: false,
-            },
-            credits: {
-                enabled: false,
-            },
-            title: {
-                text: null,
-            },
-            xAxis: {
-                type: 'datetime',
-                labels: {
-                    enabled: false,
-                }
-            },
-            yAxis: {
-                title: {
-                    text: null
-                },
-                min: 0,
-                linkedTo: 0,
-            },
-            tooltip: {
-                useHTML:true,
-                formatter: function() {
-                        console.log(this.series.name);
-                        return '<div class="chart-tooltip carrier ' + this.series.name + '">'+
-                        '<div class=label-speed>' + Math.floor(this.y).toLocaleString() + '</div><div class=units>kbps</div>' + '<div class=time>' + Highcharts.dateFormat('%H:%M', this.x) + '</div></div>';
-                }
-            },
-
-            series: [
-               {% for stats in time_data %}
-               {
-               name: '{{stats.carrier|safe}}',
-               color: '{{stats.color|safe}}',
-               pointWidth: 12,
-               data: [
-               {% for elt in stats.series %}
-               [
-               {% for unit in elt %}
-               {% if forloop.first %}Date.parse("{{ unit }}"){%else%}{{unit}}{% endif %}
-               {% if not forloop.last %},{% endif %}
-               {% endfor %}
-               ]
-               {% if not forloop.last %},{% endif %}
-               {% endfor %}
-               ]
-               }
-               {% if not forloop.last %},{% endif %}
-               {% endfor %}
-
-            ]
-        });
-    });
-
 {% endblock extra-script %}
-

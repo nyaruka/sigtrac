@@ -68,7 +68,7 @@ app.controller('MainCtrl', function($scope, averages, carriers, series) {
         backgroundColor: null,
         type: 'column',
         height: 200,
-        marginBottom: 1
+        marginBottom: 0
       },
       plotOptions: {
         column: {
@@ -92,8 +92,6 @@ app.controller('MainCtrl', function($scope, averages, carriers, series) {
         labels: {
           enabled: false,
         },
-        min: 0,
-        linkedTo: 0,
         gridLineWidth: 0,
       },
       tooltip: {

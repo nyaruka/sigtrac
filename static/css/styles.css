@@ -45,7 +45,7 @@ body {
 }
 
 #chart-spacer {
-    height: 200px;
+  height: 200px;
 }
 
 .summary-body {
@@ -155,7 +155,7 @@ body {
 }
 
 .download {
-  margin-top:70px;
+  margin-top: 50px;
   padding: 10px;
   background: #fff;
   border: 1px solid #ccc;

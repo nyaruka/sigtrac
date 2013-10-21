@@ -37,6 +37,7 @@ import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,6 +105,24 @@ public class PingService extends IntentService {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
+        SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
+
+
+        boolean background = prefs.getBoolean("run_in_background", false);
+        int bytesPerRun = prefs.getInt("bytes_per_run", -1);
+
+        boolean onDemand = intent.getBooleanExtra(HomeActivity.EXTRA_ON_DEMAND, false);
+
+        if (!onDemand && !background) {
+            Sigtrac.log("Automatic runs are currently disabled");
+            return;
+        }
+
+        // don't cap on demand runs
+        if (onDemand) {
+            bytesPerRun = -1;
+        }
+
         Sigtrac sigtrac = (Sigtrac)getApplication();
         sigtrac.setPingResults(null);
         sigtrac.setKbps(-1);
@@ -116,7 +135,6 @@ public class PingService extends IntentService {
             return;
         }
 
-
         updateLocation();
         String host = intent.getStringExtra(HomeActivity.EXTRA_HOST);
 
@@ -126,15 +144,17 @@ public class PingService extends IntentService {
             sigtrac.setPingResults(ping);
         }
 
-        downloadFile(DOWNLOAD_FILE);
+        downloadFile(DOWNLOAD_FILE, bytesPerRun);
         Sigtrac.log("Location: " + m_currentLocation);
         postData(ping, sigtrac.getKbps());
         sigtrac.setRunning(false);
-
     }
 
-    private void downloadFile(String url) {
+    private void downloadFile(String url, int maxBytes) {
         try {
+
+            Sigtrac.log("Capping download at " + maxBytes + " bytes");
+
             long start = System.currentTimeMillis();
 
             URLConnection connection = new URL(url + "?" + start).openConnection();
@@ -146,17 +166,25 @@ public class PingService extends IntentService {
             int read = 0;
             int i = 0;
 
+            Sigtrac sigtrac = ((Sigtrac)getApplication());
             while ((read = bis.read(buf)) != -1) {
                 bytes += read;
 
                 // update our kbps
                 if (i % 40 == 0) {
-                    ((Sigtrac)getApplication()).setKbps(getKbps(start, bytes));
+                    sigtrac.setKbps(getKbps(start, bytes));
+                    sigtrac.setBytesUsed(bytes);
+                }
+
+                if (maxBytes > -1 && bytes > maxBytes) {
+                    Sigtrac.log("Downloaded " + (bytes / 1024) + "KB, bailing");
+                    break;
                 }
 
                 // for now just run the test for 15 seconds
                 if ((System.currentTimeMillis() - start) > 15000) {
-                    Sigtrac.log("Test is complete, bailing");
+                    Sigtrac.log("Ran 15s, bailing");
+                    Sigtrac.log("Downloaded " + (bytes / 1024) + "KB");
                     break;
                 }
                 i++;

@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+            android:key="run_in_background"
+            android:title="@string/run_in_background"
+            android:summary="@string/background_warning"
+            android:defaultValue="false" />
+
+    <ListPreference
+        android:key="data_cap"
+        android:title="@string/data_cap_title"
+        android:summary="@string/data_cap_summary"
+        android:defaultValue="104857600"
+        android:entries="@array/data_cap_titles"
+        android:entryValues="@array/data_cap_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+</PreferenceScreen>

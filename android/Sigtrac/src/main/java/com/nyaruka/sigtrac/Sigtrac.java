@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -15,15 +17,23 @@ public class Sigtrac extends Application {
 
     public static final String TAG = "sigtrac";
 
+    // Require 3MB per run
+    public static final int MIN_BYTES_PER_RUN = 3145728;
+
     public PingService.PingResults m_pingResults;
     private boolean m_running;
     private int m_kbps;
     private boolean m_wifi;
+    private int m_bytesUsed;
+
+    public void setBytesUsed(int bytes) {
+        m_bytesUsed = bytes;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        setAlarm();
+        updateAlarm();
     }
 
     public static void log(String message) {
@@ -48,10 +58,51 @@ public class Sigtrac extends Application {
         return m_pingResults;
     }
 
-    private void setAlarm() {
+    public void updateAlarm() {
         AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         PendingIntent intent = PendingIntent.getBroadcast(this, 0, new Intent(this, AlarmReceiver.class), 0);
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1000 * 60 * 30, intent);
+
+        // remove any previous alarm
+        mgr.cancel(intent);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Sigtrac.log("Updating alarm. Run in background: " + prefs.getBoolean("run_in_background", false) + ". Capped @" + prefs.getString("data_cap", "-1"));
+
+        if (prefs.getBoolean("run_in_background", false)) {
+            int cap = Integer.parseInt(prefs.getString("data_cap", "-1"));
+
+            long day = 1000 * 60 * 60 * 24;
+
+            if (cap > -1) {
+                int runs = cap / MIN_BYTES_PER_RUN;
+
+                // max of 24 runs per day
+                runs = Math.min(runs, 24);
+                Sigtrac.log("Sleep: " + (day / runs) + "ms");
+
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putInt("runs_per_day", runs);
+                edit.putInt("bytes_per_run", cap / runs);
+                edit.commit();
+
+                Sigtrac.log("Runs per day: " + runs);
+                Sigtrac.log("Bytes per run: " + (cap / runs));
+                mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), (day / runs), intent);
+            } else {
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.remove("runs_per_day");
+                edit.remove("bytes_per_run");
+                edit.commit();
+                mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), (day / 24), intent);
+            }
+        } else {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.remove("runs_per_day");
+            edit.remove("bytes_per_run");
+            edit.commit();
+        }
+
     }
 
     public void setRunning(boolean running) {
@@ -80,6 +131,10 @@ public class Sigtrac extends Application {
 
     public boolean isWifi() {
         return m_wifi;
+    }
+
+    public static void get() {
+        return ;
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {

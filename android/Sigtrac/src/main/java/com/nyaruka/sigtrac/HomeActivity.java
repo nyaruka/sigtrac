@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.text.NumberFormat;
 public class HomeActivity extends Activity {
 
     public static final String EXTRA_HOST = "host";
+    public static final String EXTRA_ON_DEMAND = "on_demand";
     public static final String PING_RESULT = "com.nyaruka.sigtrac.PingResult";
 
     private BroadcastReceiver m_receiver;
@@ -107,12 +109,21 @@ public class HomeActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        }
+        return super.onMenuItemSelected(featureId, item);
     }
 
     public void speedTapped(View view) {
         Intent intent = new Intent(this, PingService.class);
+        intent.putExtra(EXTRA_ON_DEMAND, true);
         intent.putExtra(EXTRA_HOST, "www.google.com");
         startService(intent);
     }

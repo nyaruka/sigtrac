@@ -26,9 +26,9 @@ android {
         release {
             storeFile file('../android.keystore')
             keyAlias = "sigtrac"
-            def pw = System.console().readLine("\n\$ Enter keystore password: ")
-            storePassword pw
-            keyPassword pw
+            //def pw = System.console().readLine("\n\$ Enter keystore password: ")
+            //storePassword pw
+            //keyPassword pw
         }
     }
 
@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:18.0.0'
+	compile 'com.android.support:appcompat-v7:18.0.0'
+	compile 'com.android.support:support-v4:18.0.0'
 }
 

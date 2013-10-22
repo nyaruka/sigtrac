@@ -146,8 +146,9 @@ public class PingService extends IntentService {
 
         downloadFile(DOWNLOAD_FILE, bytesPerRun);
         Sigtrac.log("Location: " + m_currentLocation);
-        postData(ping, sigtrac.getKbps());
+        saveData(ping, sigtrac.getKbps());
         sigtrac.setRunning(false);
+
     }
 
     private void downloadFile(String url, int maxBytes) {
@@ -239,8 +240,7 @@ public class PingService extends IntentService {
         return Base64.encodeToString(byteData, Base64.URL_SAFE).trim();
     }
 
-    public void postData(PingResults ping, int kbps) {
-
+    public void saveData(PingResults ping, int kbps) {
         if (ping == null || !ping.isValid()) {
             Sigtrac.log("Invalid ping, skipping");
             return;
@@ -261,13 +261,9 @@ public class PingService extends IntentService {
         }
         String deviceId = prefs.getString("deviceId", uuid);
 
-        // TODO: write these to a file first before posting in case there's no internet
-
-        HttpClient client = new DefaultHttpClient();
-
         try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            PackageInfo info  = getPackageManager().getPackageInfo(getPackageName(), 0);
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("device", deviceId));
@@ -292,13 +288,51 @@ public class PingService extends IntentService {
             long created = System.currentTimeMillis() / 1000;
             nameValuePairs.add(new BasicNameValuePair("created_on", "" + created));
 
-            // String url = "http://192.168.0.108:8000/submit";
-            String url = "http://bitranks.com/submit";
+
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             String entityString = EntityUtils.toString(entity);
+
+            String FILENAME = "" + created;
+
+            FileOutputStream fileOutputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fileOutputStream.write(entityString.getBytes());
+            fileOutputStream.close();
+
+            for (String filename: fileList()) {
+                postData(filename);
+            }
+
+        } catch (Throwable t){
+            Log.e(Sigtrac.TAG, "Failed Saving data to file", t);
+        }
+
+
+    }
+
+    public void postData(String filename) {
+
+        HttpClient client = new DefaultHttpClient();
+
+        try {
+
+            FileInputStream fileInputStream = openFileInput(filename);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
+            int i;
+            char[] buffer = new char[fileInputStream.available()];
+            StringBuffer output = new StringBuffer();
+            while ((i = reader.read(buffer)) > 0) {
+                output.append(buffer, 0, i);
+            }
+            reader.close();
+
+            String entityString =  output.toString();
+
+            // String url = "http://192.168.0.108:8000/submit";
+            String url = "http://bitranks.com/submit";
+
             if (BuildConfig.SECRET != null) {
                 Sigtrac.log("Signing with " + BuildConfig.SECRET);
-                String signature = computeHash(BuildConfig.SECRET+created, entityString);
+                String signature = computeHash(BuildConfig.SECRET+filename, entityString);
                 url += "?" + entityString + "&s=" + URLEncoder.encode(signature);
             }
             Sigtrac.log("URL: " + url);
@@ -308,10 +342,15 @@ public class PingService extends IntentService {
 
             // Execute HTTP Post Request
             HttpResponse response = client.execute(post);
-            Sigtrac.log("Response: " + EntityUtils.toString(response.getEntity()));
+            String response_data = EntityUtils.toString(response.getEntity());
+            Sigtrac.log("Response: " + response_data);
+
+            if (response_data.equals("New Report Created")) {
+                deleteFile(filename);
+            }
 
         } catch (Throwable t) {
-            Log.e(Sigtrac.TAG, "Failed post", t);
+            Log.e(Sigtrac.TAG, "Failed to post file", t);
         }
     }
 

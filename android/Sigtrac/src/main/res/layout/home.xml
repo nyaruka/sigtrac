@@ -13,80 +13,121 @@
     <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:id="@+id/carrier_logo"
+            android:id="@+id/bitranks_logo"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/sigtrac_airtel"/>
+            android:src="@drawable/bitranks_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HSPDA"
+        android:id="@+id/connection_type"
+        android:textSize="15dp"
+        android:gravity="center_horizontal"
+        android:textColor="#fff"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/bitranks_logo"
+        android:layout_alignLeft="@+id/bitranks_logo"
+        android:layout_below="@+id/bitranks_logo" />
+
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/carrier_logo"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/carrier_logo"
+        android:layout_above="@+id/connection_type" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12345"
+        android:textStyle="bold"
+        android:id="@+id/speed"
+        android:textSize="100dp"
+        android:layout_below="@id/connection_type"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kbps"
+        android:id="@+id/kbps_label"
+        android:layout_alignRight="@+id/speed"
+        android:layout_marginTop="-15dp"
+        android:layout_marginRight="-10dp"
+        android:layout_below="@+id/speed"
+        android:textSize="20dp"
+        android:textColor="#fff"/>
+
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Data"
+        android:gravity="center_vertical"
+        android:text="6546 ms"
         android:id="@+id/avg_time"
         android:textSize="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:textColor="#fff"/>
+        android:layout_below="@id/kbps_label"
+        android:textColor="#fff"
+        android:layout_marginRight="25dp"
+        android:layout_alignBottom="@+id/ping_icon"
+        android:layout_toLeftOf="@+id/packets_lost" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/packets_lost"
-            android:layout_alignParentRight="true"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/avg_time"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:text="100%"
+        android:id="@+id/packets_lost"
+        android:textSize="20dp"
+        android:textColor="#fff"
+        android:layout_below="@id/kbps_label"
+        android:layout_alignBottom="@+id/ping_icon" />
 
     <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
-            android:id="@+id/ping_icon"
-            android:layout_below="@+id/packets_lost"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/sigtrac_ping_icon"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/ping_icon"
+        android:layout_below="@id/kbps_label"
+        android:layout_toRightOf="@id/packets_lost"
+        android:layout_marginLeft="25dp"
+        android:src="@drawable/sigtrac_ping_icon_new"
+        android:layout_alignRight="@+id/kbps_label" />
 
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textStyle="bold"
-            android:id="@+id/speed"
-            android:textSize="100dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="speedTapped"
-            android:clickable="true"
-            android:textColor="#fff"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/posted"
+        android:id="@+id/posted"
+        android:linksClickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:autoLink="web"
+        android:textColor="#fff"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="kbps"
-            android:id="@+id/kbps_label"
-            android:layout_alignRight="@+id/speed"
-            android:layout_marginTop="-15dp"
-            android:layout_marginRight="-10dp"
-            android:layout_below="@+id/speed"
-            android:textSize="20dp"
-            android:textColor="#fff"/>
-
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/posted"
-            android:id="@+id/posted"
-            android:linksClickable="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="20dp"
-            android:autoLink="web"
-            android:textColor="#fff"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Test"
+        android:textColor="#fff"
+        android:textSize="70dp"
+        android:id="@+id/startTest"
+        android:onClick="speedTapped"
+        android:clickable="true"
+        android:layout_alignTop="@+id/speed"
+        android:layout_alignLeft="@+id/connection_type"
+        android:layout_marginTop="12dp"
+        android:layout_alignBottom="@+id/avg_time"
+        android:layout_alignRight="@+id/carrier_logo" />
 
 </RelativeLayout>

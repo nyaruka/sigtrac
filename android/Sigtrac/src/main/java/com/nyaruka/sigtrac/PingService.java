@@ -104,6 +104,8 @@ public class PingService extends IntentService {
 
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
 
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -125,6 +127,7 @@ public class PingService extends IntentService {
 
         Sigtrac sigtrac = (Sigtrac)getApplication();
         sigtrac.setPingResults(null);
+        sigtrac.setConnectionType(null);
         sigtrac.setKbps(-1);
         sigtrac.setWifi(false);
         sigtrac.setRunning(true);
@@ -136,17 +139,27 @@ public class PingService extends IntentService {
         }
 
         updateLocation();
+
+        if (m_lastSignal != null){
+            sigtrac.setSignalStrengthLevel(m_lastSignal);
+        }
+
+        sigtrac.setConnectionType(getConnectedDataNetwork(telephonyManager.getNetworkType()));
+
+
         String host = intent.getStringExtra(HomeActivity.EXTRA_HOST);
 
         // do some pinging
         PingResults ping = pingHost(host, 6);
+
+        downloadFile(DOWNLOAD_FILE, bytesPerRun);
+
         if (ping != null) {
             sigtrac.setPingResults(ping);
         }
 
-        downloadFile(DOWNLOAD_FILE, bytesPerRun);
         Sigtrac.log("Location: " + m_currentLocation);
-        saveData(ping, sigtrac.getKbps());
+        saveData(ping, sigtrac.getKbps(), telephonyManager);
         sigtrac.setRunning(false);
 
     }
@@ -240,7 +253,7 @@ public class PingService extends IntentService {
         return Base64.encodeToString(byteData, Base64.URL_SAFE).trim();
     }
 
-    public void saveData(PingResults ping, int kbps) {
+    public void saveData(PingResults ping, int kbps, TelephonyManager telephonyManager) {
         if (ping == null || !ping.isValid()) {
             Sigtrac.log("Invalid ping, skipping");
             return;
@@ -251,7 +264,6 @@ public class PingService extends IntentService {
             return;
         }
 
-        TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -267,11 +279,11 @@ public class PingService extends IntentService {
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("device", deviceId));
-            nameValuePairs.add(new BasicNameValuePair("carrier", manager.getSimOperatorName()));
-            nameValuePairs.add(new BasicNameValuePair("country", manager.getSimCountryIso()));
+            nameValuePairs.add(new BasicNameValuePair("carrier", telephonyManager.getSimOperatorName()));
+            nameValuePairs.add(new BasicNameValuePair("country", telephonyManager.getSimCountryIso()));
             nameValuePairs.add(new BasicNameValuePair("device_build", Build.MANUFACTURER + ";" + Build.MODEL));
             nameValuePairs.add(new BasicNameValuePair("device_type", "AND"));
-            nameValuePairs.add(new BasicNameValuePair("connection_type", cm.getActiveNetworkInfo().getSubtypeName()));
+            nameValuePairs.add(new BasicNameValuePair("connection_type", getConnectedDataNetwork(telephonyManager.getNetworkType())));
             nameValuePairs.add(new BasicNameValuePair("download_speed", "" + kbps));
             nameValuePairs.add(new BasicNameValuePair("ping", "" + ping.avg.intValue()));
             nameValuePairs.add(new BasicNameValuePair("packets_dropped", "" + ping.pctLost));
@@ -308,6 +320,86 @@ public class PingService extends IntentService {
 
 
     }
+
+    public String getConnectedDataNetwork(int networkType) {
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+                return "GPRS";
+
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+                return "EDGE";
+
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+                return "UMTS";
+
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+                return "CDMA";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                return "EVDO rev.0";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                return "EVDO rev.A";
+
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                return "1xRTT";
+
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+                return "HSPDA";
+
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+                return "HSUPA";
+
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+                return "HSPA";
+
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "IDEN";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                return "EVDO rev.B";
+
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "LTE";
+
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+                return "eHRPD";
+
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "HSPA+";
+
+            default:
+                return "UNKNOWN";
+
+        }
+    }
+
+
+    public static String getNetworkClass(int networkType) {
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "2G";
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "3G";
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "4G";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
 
     public void postData(String filename) {
 

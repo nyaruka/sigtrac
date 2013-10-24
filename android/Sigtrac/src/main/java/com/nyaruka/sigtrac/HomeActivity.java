@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,7 +13,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,13 +52,51 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        showProgressStart();
+
 
         TelephonyManager tele = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         setCarrier(tele.getSimOperatorName(), tele.getSimOperator());
         m_receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                PingService.PingResults ping = ((Sigtrac)getApplication()).getPingResults();
+
+                Sigtrac sigtrac = (Sigtrac)getApplication();
+                TextView speed = (TextView) HomeActivity.this.findViewById(R.id.speed);
+
+                ImageButton onDemandStart = (ImageButton) HomeActivity.this.findViewById(R.id.onDemandStart);
+                onDemandStart.setVisibility(View.GONE);
+
+                TextView connectionType = (TextView) HomeActivity.this.findViewById(R.id.connection_type);
+
+                ImageView bitranksLogo = (ImageView) HomeActivity.this.findViewById(R.id.bitranks_logo);
+
+                if (sigtrac.getConnectionType() != null) {
+                    connectionType.setVisibility(View.VISIBLE);
+                    connectionType.setText(sigtrac.getConnectionType());
+                } else {
+                    connectionType.setText("");
+                    connectionType.setVisibility(View.INVISIBLE);
+                }
+
+                if (sigtrac.get_signalStrengthLevel() == "THREE_BAR"){
+                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_3_bar);
+                } else if (sigtrac.get_signalStrengthLevel() == "TWO_BAR"){
+                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_2_bar);
+                } else {
+                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_1_bar);
+                }
+
+
+                if (sigtrac.getKbps() > 0) {
+                    NumberFormat formatter = new DecimalFormat("###,###,###");
+                    speed.setVisibility(View.VISIBLE);
+                    HomeActivity.this.findViewById(R.id.kbps_label).setVisibility(View.VISIBLE);
+                    speed.setText(formatter.format(sigtrac.getKbps()));
+                    HomeActivity.this.findViewById(R.id.onStartProgress).setVisibility(View.GONE);
+                }
+
+                PingService.PingResults ping = sigtrac.getPingResults();
 
                 if (ping != null && ping.isValid()) {
                     TextView avg = (TextView) HomeActivity.this.findViewById(R.id.avg_time);
@@ -72,20 +114,11 @@ public class HomeActivity extends Activity {
                     HomeActivity.this.findViewById(R.id.ping_icon).setVisibility(View.GONE);
                 }
 
-                Sigtrac sigtrac = (Sigtrac)getApplication();
-                TextView speed = (TextView) HomeActivity.this.findViewById(R.id.speed);
-
-                if (sigtrac.getKbps() > 0) {
-                    NumberFormat formatter = new DecimalFormat("###,###,###");
-                    speed.setText(formatter.format(sigtrac.getKbps()));
-                } else {
-                    speed.setText("...");
-                }
-
                 if (sigtrac.isRunning()) {
                     HomeActivity.this.findViewById(R.id.posted).setVisibility(View.GONE);
                 } else {
                     HomeActivity.this.findViewById(R.id.posted).setVisibility(View.VISIBLE);
+                    onDemandStart.setVisibility(View.VISIBLE);
                 }
 
                 if (sigtrac.isWifi()) {
@@ -121,10 +154,22 @@ public class HomeActivity extends Activity {
         return super.onMenuItemSelected(featureId, item);
     }
 
-    public void speedTapped(View view) {
+    public void onDemandStart(View view) {
         Intent intent = new Intent(this, PingService.class);
         intent.putExtra(EXTRA_ON_DEMAND, true);
         intent.putExtra(EXTRA_HOST, "www.google.com");
         startService(intent);
+        showProgressStart();
+    }
+
+    public void showProgressStart() {
+        HomeActivity.this.findViewById(R.id.ping_icon).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.packets_lost).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.avg_time).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.speed).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.kbps_label).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.onDemandStart).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.posted).setVisibility(View.GONE);
+        HomeActivity.this.findViewById(R.id.onStartProgress).setVisibility(View.VISIBLE);
     }
 }

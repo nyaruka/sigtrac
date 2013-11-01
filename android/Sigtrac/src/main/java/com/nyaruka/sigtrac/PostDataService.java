@@ -81,10 +81,10 @@ public class PostDataService extends IntentService {
 
             // Execute HTTP Post Request
             HttpResponse response = client.execute(post);
-            String response_data = EntityUtils.toString(response.getEntity());
-            Sigtrac.log("Response: " + response_data);
+            String responseContent = EntityUtils.toString(response.getEntity());
+            Sigtrac.log("Response: " + responseContent);
 
-            if (response_data.equals("New Report Created")) {
+            if (responseContent.equals("New Report Created")) {
                 deleteFile(filename);
             }
 

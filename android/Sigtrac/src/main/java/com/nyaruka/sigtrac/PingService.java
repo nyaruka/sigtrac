@@ -303,9 +303,9 @@ public class PingService extends IntentService {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             String entityString = EntityUtils.toString(entity);
 
-            String FILENAME = "" + created;
+            String filename = "" + created;
 
-            FileOutputStream fileOutputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             fileOutputStream.write(entityString.getBytes());
             fileOutputStream.close();
 

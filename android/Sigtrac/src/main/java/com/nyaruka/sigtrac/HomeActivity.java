@@ -99,7 +99,7 @@ public class HomeActivity extends Activity {
                 if (!sigtrac.isRunning()) {
                     lastResultsView.updateLastResults();
                     currentReportVew.showStartButton();
-                } 
+                }
 
                 if (sigtrac.isWifi()) {
                     Toast.makeText(HomeActivity.this, "Sorry, can't run mobile network test while connected to wifi", Toast.LENGTH_SHORT).show();

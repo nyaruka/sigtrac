@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,28 +15,25 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
-import android.util.Base64;
 import android.util.Log;
-import org.apache.http.HttpResponse;
+
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.prefs.Preferences;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,6 +97,8 @@ public class PingService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Sigtrac sigtrac = (Sigtrac)getApplication();
+
 
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -125,7 +123,6 @@ public class PingService extends IntentService {
             bytesPerRun = -1;
         }
 
-        Sigtrac sigtrac = (Sigtrac)getApplication();
         sigtrac.setPingResults(null);
         sigtrac.setConnectionType(null);
         sigtrac.setKbps(-1);
@@ -149,10 +146,12 @@ public class PingService extends IntentService {
 
         String host = intent.getStringExtra(HomeActivity.EXTRA_HOST);
 
+
         // do some pinging
         PingResults ping = pingHost(host, 6);
 
         downloadFile(DOWNLOAD_FILE, bytesPerRun);
+
 
         if (ping != null) {
             sigtrac.setPingResults(ping);
@@ -160,6 +159,11 @@ public class PingService extends IntentService {
 
         Sigtrac.log("Location: " + m_currentLocation);
         saveData(ping, sigtrac.getKbps(), telephonyManager);
+
+        try {
+            Thread.sleep(10000);
+        } catch(Throwable t) {}
+
         sigtrac.setRunning(false);
 
     }
@@ -245,13 +249,7 @@ public class PingService extends IntentService {
         }
     }
 
-    public String computeHash(String secret, String input) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(new SecretKeySpec((secret).getBytes(), "ASCII"));
-        mac.update(input.getBytes("UTF-8"));
-        byte[] byteData = mac.doFinal();
-        return Base64.encodeToString(byteData, Base64.URL_SAFE).trim();
-    }
+
 
     public void saveData(PingResults ping, int kbps, TelephonyManager telephonyManager) {
         if (ping == null || !ping.isValid()) {
@@ -296,8 +294,9 @@ public class PingService extends IntentService {
                 nameValuePairs.add(new BasicNameValuePair("longitude", "" + m_currentLocation.m_lng));
             }
 
+            long now = System.currentTimeMillis();
 
-            long created = System.currentTimeMillis() / 1000;
+            long created = now / 1000;
             nameValuePairs.add(new BasicNameValuePair("created_on", "" + created));
 
 
@@ -310,9 +309,17 @@ public class PingService extends IntentService {
             fileOutputStream.write(entityString.getBytes());
             fileOutputStream.close();
 
-            for (String filename: fileList()) {
-                postData(filename);
-            }
+
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putString("lastResultsSpeed", "" + kbps);
+            edit.putString("lastResultsPing", "" + ping.avg.intValue());
+            edit.putString("lastResultsPacketsDropped", "" + ping.pctLost);
+            edit.putLong("lastResultsCreated", now);
+            edit.commit();
+
+            Intent intent = new Intent(this, PostDataService.class);
+            startService(intent);
+
 
         } catch (Throwable t){
             Log.e(Sigtrac.TAG, "Failed Saving data to file", t);
@@ -397,52 +404,6 @@ public class PingService extends IntentService {
                 return "4G";
             default:
                 return "UNKNOWN";
-        }
-    }
-
-
-    public void postData(String filename) {
-
-        HttpClient client = new DefaultHttpClient();
-
-        try {
-
-            FileInputStream fileInputStream = openFileInput(filename);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
-            int i;
-            char[] buffer = new char[fileInputStream.available()];
-            StringBuffer output = new StringBuffer();
-            while ((i = reader.read(buffer)) > 0) {
-                output.append(buffer, 0, i);
-            }
-            reader.close();
-
-            String entityString =  output.toString();
-
-            // String url = "http://192.168.0.108:8000/submit";
-            String url = "http://bitranks.com/submit";
-
-            if (BuildConfig.SECRET != null) {
-                Sigtrac.log("Signing with " + BuildConfig.SECRET);
-                String signature = computeHash(BuildConfig.SECRET+filename, entityString);
-                url += "?" + entityString + "&s=" + URLEncoder.encode(signature);
-            }
-            Sigtrac.log("URL: " + url);
-
-            HttpPost post = new HttpPost(url);
-            Sigtrac.log(entityString);
-
-            // Execute HTTP Post Request
-            HttpResponse response = client.execute(post);
-            String response_data = EntityUtils.toString(response.getEntity());
-            Sigtrac.log("Response: " + response_data);
-
-            if (response_data.equals("New Report Created")) {
-                deleteFile(filename);
-            }
-
-        } catch (Throwable t) {
-            Log.e(Sigtrac.TAG, "Failed to post file", t);
         }
     }
 

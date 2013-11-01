@@ -1,27 +1,22 @@
 package com.nyaruka.sigtrac;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import com.nyaruka.sigtrac.ui.CurrentReportVew;
+import com.nyaruka.sigtrac.ui.LastResultsView;
 
 public class HomeActivity extends Activity {
 
@@ -52,7 +47,12 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-        showProgressStart();
+
+        CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
+        currentReportVew.showProgressBar();
+
+        LastResultsView lastResultsView = (LastResultsView) HomeActivity.this.findViewById(R.id.last_results_container);
+        lastResultsView.updateLastResults();
 
 
         TelephonyManager tele = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -62,10 +62,10 @@ public class HomeActivity extends Activity {
             public void onReceive(Context context, Intent intent) {
 
                 Sigtrac sigtrac = (Sigtrac)getApplication();
-                TextView speed = (TextView) HomeActivity.this.findViewById(R.id.speed);
 
-                ImageButton onDemandStart = (ImageButton) HomeActivity.this.findViewById(R.id.onDemandStart);
-                onDemandStart.setVisibility(View.GONE);
+                CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
+
+                LastResultsView lastResultsView = (LastResultsView) HomeActivity.this.findViewById(R.id.last_results_container);
 
                 TextView connectionType = (TextView) HomeActivity.this.findViewById(R.id.connection_type);
 
@@ -87,39 +87,19 @@ public class HomeActivity extends Activity {
                     bitranksLogo.setImageResource(R.drawable.bitranks_logo_1_bar);
                 }
 
-
                 if (sigtrac.getKbps() > 0) {
-                    NumberFormat formatter = new DecimalFormat("###,###,###");
-                    speed.setVisibility(View.VISIBLE);
-                    HomeActivity.this.findViewById(R.id.kbps_label).setVisibility(View.VISIBLE);
-                    speed.setText(formatter.format(sigtrac.getKbps()));
-                    HomeActivity.this.findViewById(R.id.onStartProgress).setVisibility(View.GONE);
+                    currentReportVew.setSpeed(sigtrac.getKbps());
+                } else {
+                    currentReportVew.showProgressBar();
                 }
 
                 PingService.PingResults ping = sigtrac.getPingResults();
+                currentReportVew.setPing(ping);
 
-                if (ping != null && ping.isValid()) {
-                    TextView avg = (TextView) HomeActivity.this.findViewById(R.id.avg_time);
-                    avg.setText(ping.avg.intValue() + "ms");
-                    avg.setVisibility(View.VISIBLE);
-
-                    TextView packets = (TextView) HomeActivity.this.findViewById(R.id.packets_lost);
-                    packets.setText(ping.pctLost.intValue() + "%");
-                    packets.setVisibility(View.VISIBLE);
-
-                    HomeActivity.this.findViewById(R.id.ping_icon).setVisibility(View.VISIBLE);
-                } else {
-                    HomeActivity.this.findViewById(R.id.avg_time).setVisibility(View.GONE);
-                    HomeActivity.this.findViewById(R.id.packets_lost).setVisibility(View.GONE);
-                    HomeActivity.this.findViewById(R.id.ping_icon).setVisibility(View.GONE);
-                }
-
-                if (sigtrac.isRunning()) {
-                    HomeActivity.this.findViewById(R.id.posted).setVisibility(View.GONE);
-                } else {
-                    HomeActivity.this.findViewById(R.id.posted).setVisibility(View.VISIBLE);
-                    onDemandStart.setVisibility(View.VISIBLE);
-                }
+                if (!sigtrac.isRunning()) {
+                    lastResultsView.updateLastResults();
+                    currentReportVew.showStartButton();
+                } 
 
                 if (sigtrac.isWifi()) {
                     Toast.makeText(HomeActivity.this, "Sorry, can't run mobile network test while connected to wifi", Toast.LENGTH_SHORT).show();
@@ -159,17 +139,10 @@ public class HomeActivity extends Activity {
         intent.putExtra(EXTRA_ON_DEMAND, true);
         intent.putExtra(EXTRA_HOST, "www.google.com");
         startService(intent);
-        showProgressStart();
+        CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
+        currentReportVew.showProgressBar();
+
     }
 
-    public void showProgressStart() {
-        HomeActivity.this.findViewById(R.id.ping_icon).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.packets_lost).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.avg_time).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.speed).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.kbps_label).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.onDemandStart).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.posted).setVisibility(View.GONE);
-        HomeActivity.this.findViewById(R.id.onStartProgress).setVisibility(View.VISIBLE);
-    }
+
 }

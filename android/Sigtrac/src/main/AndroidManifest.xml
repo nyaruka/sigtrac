@@ -34,6 +34,7 @@
         </activity>
 
         <service android:name="com.nyaruka.sigtrac.PingService" />
+        <service android:name="com.nyaruka.sigtrac.PostDataService" />
 
         <receiver android:name=".BootReceiver">
             <intent-filter>

@@ -132,6 +132,7 @@ public class PingService extends IntentService {
         if (wifi.isConnected()) {
             Sigtrac.log("Wifi connected, not running test");
             sigtrac.setWifi(true);
+            sigtrac.setRunning(false);
             return;
         }
 

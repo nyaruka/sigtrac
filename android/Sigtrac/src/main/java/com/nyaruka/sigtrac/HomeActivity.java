@@ -49,7 +49,7 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.home);
 
         CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
-        currentReportVew.showProgressBar();
+        currentReportVew.showStartButton();
 
         LastResultsView lastResultsView = (LastResultsView) HomeActivity.this.findViewById(R.id.last_results_container);
         lastResultsView.updateLastResults();

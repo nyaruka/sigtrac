@@ -144,14 +144,9 @@ public class CurrentReportVew extends RelativeLayout {
     }
 
     public void setSpeed(int speed) {
-        if (speed > 0) {
-            NumberFormat formatter = new DecimalFormat("###,###,###");
-            getCurrentReportSpeedView().setText(formatter.format(speed));
-            showCurrentReport();
-        } else {
-            getCurrentReportKbpsLabelView().setVisibility(GONE);
-            getCurrentReportSpeedView().setVisibility(GONE);
-        }
+        NumberFormat formatter = new DecimalFormat("###,###,###");
+        getCurrentReportSpeedView().setText(formatter.format(speed));
+        showCurrentReport();
     }
 
     public void setPing(PingService.PingResults ping) {

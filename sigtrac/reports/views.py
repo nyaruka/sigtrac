@@ -107,7 +107,7 @@ class Results(View):
         data = {}
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour).aggregate(ping=Avg('ping'),
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_hour, download_speed__gte=0).aggregate(ping=Avg('ping'),
                                             download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
                                             report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
@@ -116,7 +116,7 @@ class Results(View):
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day).aggregate(ping=Avg('ping'),
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_day, download_speed__gte=0).aggregate(ping=Avg('ping'),
                                             download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
                                             report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports
@@ -125,7 +125,7 @@ class Results(View):
 
         period_data = dict()
         for carrier in Carrier.objects.all():
-            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week).aggregate(ping=Avg('ping'),
+            reports = Report.objects.filter(carrier=carrier, created_on__gte=last_week, download_speed__gte=0).aggregate(ping=Avg('ping'),
                                             download_speed=Avg('download_speed'), packets_dropped=Avg('packets_dropped'),
                                             report_count=Count('id'), device_count=Count('device__id', distinct=True))
             period_data[carrier.slug] = reports

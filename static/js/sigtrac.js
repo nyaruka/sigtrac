@@ -86,6 +86,7 @@ app.controller('MainCtrl', function($scope, averages, carriers, series) {
         }
       },
       yAxis: {
+	min: 0,
         title: {
           text: null,
         },

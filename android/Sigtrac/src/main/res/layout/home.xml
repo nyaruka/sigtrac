@@ -1,7 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/airtel"
+    android:background="@color/mtn"
     android:id="@+id/main_bg"
     tools:context=".HomeActivity"
     android:layout_width="match_parent"
@@ -24,30 +24,30 @@
             >
 
             <TextView
+                android:id="@+id/connection_type"
                 android:layout_height="27dp"
                 android:layout_width="102dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:id="@+id/connection_type"
                 android:layout_marginLeft="20dp"
                 android:text="HSPA+"
-                android:textColor="#50ffffff"
+                android:textColor="#90ffffff"
                 android:gravity="center_vertical|right"
                 />
 
             <ImageView
+                android:id="@+id/connection_strenght_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/connection_type"
-                android:id="@+id/connection_strenght_icon"
                 android:src="@drawable/connection_strength_three"
                 />
 
             <ImageView
+                android:id="@+id/carrier_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/carrier_logo"
                 android:src="@drawable/airtel_logo"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@id/connection_type"
@@ -67,12 +67,13 @@
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
                 android:text="NOVEMBER 05, 2013"
-                android:textColor="#80ffffff"
+                android:textColor="#90ffffff"
                 android:gravity="center_vertical|right"
                 android:layout_marginBottom="4dp"/>
 
 
             <TextView
+                android:id="@+id/phone_model"
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
                 android:text="SAMSUNG GALAXY S4"
@@ -83,207 +84,233 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:visibility="invisible"
+        <com.nyaruka.sigtrac.ui.CurrentReportVew
             android:id="@+id/current_report_container"
             android:layout_width="match_parent"
-            android:layout_height="165dp"
+            android:layout_height="180dp"
             android:layout_marginBottom="50dp"
             android:layout_below="@id/phone_details">
 
-            <RelativeLayout
-
-                android:id="@+id/start_buttom"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"
-                android:background="#fff"
-                android:gravity="center_vertical|center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/airtel"
-                    android:src="@drawable/ic_start_test"
-                    />
-
-                <TextView
-                    android:paddingLeft="45dp"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="START SPEED TEST"
-                    android:textSize="27dp"
-                    android:textColor="@color/airtel"
-                    android:textStyle="bold"
-                    />
-
-            </RelativeLayout>
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="match_parent"
-                android:layout_height="68dp"/>
-
-
-            <TextView
-
-                android:layout_height="wrap_content"
-                android:layout_width="222dp"
-                android:layout_below="@id/start_buttom"
-                android:gravity="right"
-                android:layout_marginTop="20dp"
-                android:textColor="#80ffffff"
-                android:text="YOUR SPEED TEST WILL BE SHARED ANONYMOUSLY ON BITRANKS.COM FOR THE BEST RESULT, PLEASE ENABLE GPS"/>
-
-            <TextView
-                android:id="@+id/ping_label"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="PING"
-                android:textColor="#ffffff"
-                android:layout_alignParentRight="true"
-                android:textSize="16dp"/>
-
-            <ImageView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_toLeftOf="@id/ping_label"
-                android:src="@drawable/ic_ping"
-                android:paddingTop="4dp"
-                android:paddingRight="4dp"/>
-
-
-            <TextView
-                android:id="@+id/millisecs_label"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="MILLISECS"
-                android:textColor="#80ffffff"
-                android:layout_below="@id/ping_label"
-                android:layout_alignParentRight="true"/>
-
-
-            <TextView
-                android:id="@+id/millisecs_value"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="325"
-                android:textColor="#ffffff"
-                android:textSize="38dp"
-                android:layout_below="@id/millisecs_label"
-                android:layout_alignParentRight="true"/>
-
-
-            <TextView
-                android:id="@+id/packets_loss_label"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="PACKET LOSS"
-                android:textColor="#80ffffff"
-                android:layout_below="@id/millisecs_value"
-                android:layout_marginTop="26dp"
-                android:layout_alignParentRight="true"/>
-
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="59%"
-                android:textColor="#ffffff"
-                android:textSize="38dp"
-                android:layout_below="@id/packets_loss_label"
-                android:layout_alignParentRight="true"/>
-
 
             <RelativeLayout
-
+                android:visibility="gone"
+                android:onClick="onDemandStart"
+                android:id="@+id/current_report_initial_container"
                 android:layout_height="match_parent"
-                android:layout_width="242dp"
-                android:paddingRight="20dp"
-                >
-
-
-
-                <TextView
-                    android:id="@+id/speed_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="DOWNLOAD SPEED"
-                    android:textSize="16dp"
-                    android:textColor="#ffffff"
-                    android:gravity="right|center_vertical"/>
-
-
-                <TextView
-                    android:id="@+id/kbps_label"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="KBPS"
-                    android:textColor="#80ffffff"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/speed_label"/>
-
-                <ImageView
-                    android:id="@+id/down_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_down_medium"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/kbps_label"
-                    android:layout_marginTop="5dp"/>
-
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="43,585"
-                    android:textColor="#ffffff"
-                    android:textSize="54dp"
-                    android:layout_below="@id/speed_label"
-                    android:gravity="right"
-                    android:layout_toLeftOf="@id/kbps_label"
-                    android:paddingRight="8dp"/>
+                android:layout_width="match_parent">
 
                 <RelativeLayout
-                    android:id="@+id/restart_buttom"
+                    android:id="@+id/start_button"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="68dp"
                     android:background="#fff"
-                    android:gravity="center_vertical|center"
-                    android:layout_below="@id/down_icon"
-                    android:layout_marginTop="38dp"
-                    >
+                    android:gravity="center_vertical|center">
 
                     <ImageView
+                        android:id="@+id/start_button_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/airtel"
-                        android:src="@drawable/ic_start_again"
+                        android:src="@drawable/ic_start_test"
                         />
 
                     <TextView
-                        android:paddingLeft="35dp"
+                        android:id="@+id/start_button_text"
+                        android:paddingLeft="45dp"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="START AGAIN"
-                        android:textSize="22dp"
+                        android:text="START SPEED TEST"
+                        android:textSize="27dp"
                         android:textColor="@color/airtel"
                         android:textStyle="bold"
                         />
 
                 </RelativeLayout>
 
+
+                <TextView
+                    android:id="@+id/help_text"
+
+                    android:layout_height="wrap_content"
+                    android:layout_width="222dp"
+                    android:layout_below="@id/start_button"
+                    android:gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#90ffffff"
+                    android:text="YOUR SPEED TEST WILL BE SHARED ANONYMOUSLY ON BITRANKS.COM FOR THE BEST RESULT, PLEASE ENABLE GPS"/>
+
             </RelativeLayout>
 
+            <ProgressBar
+                android:visibility="gone"
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="68dp"/>
+
+
             <RelativeLayout
+                android:id="@+id/current_report_running_container"
                 android:layout_height="match_parent"
-                android:layout_width="2dp"
-                android:layout_marginLeft="242dp"
+                android:layout_width="match_parent" >
 
-                android:background="#80ffffff"/>
+                <TextView
+                    android:id="@+id/current_report_running_ping_time_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="PING"
+                    android:textColor="#ffffff"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/current_report_running_ping_time_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_toLeftOf="@id/current_report_running_ping_time_label"
+                    android:src="@drawable/ic_ping"
+                    android:paddingTop="4dp"
+                    android:paddingRight="4dp"/>
 
-        <RelativeLayout
+
+                <TextView
+                    android:id="@+id/current_report_running_ping_time_unit_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="MILLISECS"
+                    android:textColor="#90ffffff"
+                    android:layout_below="@id/current_report_running_ping_time_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <TextView
+                    android:id="@+id/current_report_running_ping_time_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="325"
+                    android:textColor="#ffffff"
+                    android:textSize="38dp"
+                    android:layout_below="@id/current_report_running_ping_time_unit_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <TextView
+                    android:id="@+id/current_report_running_packets_loss_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="PACKET LOSS"
+                    android:textColor="#90ffffff"
+                    android:layout_below="@id/current_report_running_ping_time_value"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignParentRight="true"/>
+
+
+                <TextView
+                    android:id="@+id/current_report_running_packets_loss_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="59%"
+                    android:textColor="#ffffff"
+                    android:textSize="38dp"
+                    android:layout_below="@id/current_report_running_packets_loss_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <RelativeLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="242dp"
+                    android:paddingRight="20dp"
+                    >
+
+
+
+                    <TextView
+                        android:id="@+id/current_report_running_speed_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="DOWNLOAD SPEED"
+                        android:textSize="16dp"
+                        android:textColor="#ffffff"
+                        android:gravity="right|center_vertical"/>
+
+
+                    <TextView
+                        android:id="@+id/current_report_running_speed_unit_label"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="KBPS"
+                        android:textColor="#90ffffff"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/current_report_running_speed_label"/>
+
+                    <ImageView
+                        android:id="@+id/current_report_running_speed_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_down_medium"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/current_report_running_speed_unit_label"
+                        android:layout_marginTop="5dp"/>
+
+                    <TextView
+                        android:id="@+id/current_report_running_speed_value"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="43,585"
+                        android:textColor="#ffffff"
+                        android:textSize="54dp"
+                        android:layout_below="@id/current_report_running_speed_label"
+                        android:gravity="right"
+                        android:layout_toLeftOf="@id/current_report_running_speed_unit_label"
+                        android:paddingRight="8dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/current_report_running_restart_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:background="#fff"
+                        android:gravity="center_vertical|center"
+                        android:layout_below="@id/current_report_running_speed_icon"
+                        android:layout_marginTop="38dp"
+                        android:onClick="onDemandStart"
+                        >
+
+                        <ImageView
+                            android:id="@+id/restart_button_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/airtel"
+                            android:src="@drawable/ic_start_again"
+                            />
+
+                        <TextView
+                            android:id="@+id/restart_button_text"
+                            android:paddingLeft="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:text="START AGAIN"
+                            android:textSize="22dp"
+                            android:textColor="@color/airtel"
+                            android:textStyle="bold"
+                            />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vertical_divider"
+                    android:layout_height="match_parent"
+                    android:layout_width="2dp"
+                    android:layout_marginLeft="242dp"
+                    android:background="#90ffffff"/>
+
+            </RelativeLayout>
+
+
+        </com.nyaruka.sigtrac.ui.CurrentReportVew>
+
+        <com.nyaruka.sigtrac.ui.LastResultsView
             android:id="@+id/last_results_container"
             android:layout_width="match_parent"
             android:layout_height="140dp"
@@ -294,7 +321,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
                 android:text="NOVERMBER 28, 2045"
-                android:textColor="#80ffffff"
+                android:textColor="#90ffffff"
                 android:gravity="right|center_vertical"/>
 
             <TextView
@@ -316,7 +343,7 @@
                 android:text="PACKET LOSS"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"
-                android:textColor="#80ffffff"/>
+                android:textColor="#90ffffff"/>
 
             <TextView
                 android:id="@+id/last_results_packet_loss_value"
@@ -336,7 +363,7 @@
                 android:text="PING TIME"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"
-                android:textColor="#80ffffff"
+                android:textColor="#90ffffff"
                 android:gravity="right|center_vertical"/>
 
             <TextView
@@ -361,7 +388,7 @@
                 android:paddingTop="8dp"
                 android:paddingRight="3dp"
 
-               />
+                />
 
 
             <TextView
@@ -369,7 +396,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="DOWNLOAD SPEED"
-                android:textColor="#80ffffff"
+                android:textColor="#90ffffff"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"/>
 
@@ -393,7 +420,7 @@
                 android:src="@drawable/ic_down_small"/>
 
 
-        </RelativeLayout>
+        </com.nyaruka.sigtrac.ui.LastResultsView>
 
     </RelativeLayout>
 

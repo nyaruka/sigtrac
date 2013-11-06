@@ -161,10 +161,6 @@ public class PingService extends IntentService {
         Sigtrac.log("Location: " + m_currentLocation);
         saveData(ping, sigtrac.getKbps(), telephonyManager);
 
-        try {
-            Thread.sleep(10000);
-        } catch(Throwable t) {}
-
         sigtrac.setRunning(false);
 
     }

@@ -32,13 +32,38 @@ public class HomeActivity extends Activity {
         if (carrierCode != null) {
             if (carrierCode.equals("63510")) { // MTN
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.mtn));
-                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_mtn));
+
+                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.mtn_logo));
+
+                findViewById(R.id.start_button_icon).setBackgroundColor(getResources().getColor(R.color.mtn));
+                ((TextView)findViewById(R.id.start_button_text)).setTextColor(getResources().getColor(R.color.mtn));
+
+                findViewById(R.id.restart_button_icon).setBackgroundColor(getResources().getColor(R.color.mtn));
+                ((TextView)findViewById(R.id.restart_button_text)).setTextColor(getResources().getColor(R.color.mtn));
             } else if (carrierCode.equals("63513")) { // Tigo
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.tigo));
-                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_tigo));
+
+                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.tigo_logo));
+
+                findViewById(R.id.start_button_icon).setBackgroundColor(getResources().getColor(R.color.tigo));
+                ((TextView)findViewById(R.id.start_button_text)).setTextColor(getResources().getColor(R.color.tigo));
+
+                findViewById(R.id.restart_button_icon).setBackgroundColor(getResources().getColor(R.color.tigo));
+                ((TextView)findViewById(R.id.restart_button_text)).setTextColor(getResources().getColor(R.color.tigo));
+
             } else if (carrierCode.equals("63514")) { // Airtel
                 findViewById(R.id.main_bg).setBackgroundColor(getResources().getColor(R.color.airtel));
-                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.sigtrac_airtel));
+
+                ((ImageView)findViewById(R.id.carrier_logo)).setImageDrawable(getResources().getDrawable(R.drawable.airtel_logo));
+
+
+                findViewById(R.id.start_button_icon).setBackgroundColor(getResources().getColor(R.color.airtel));
+                ((TextView)findViewById(R.id.start_button_text)).setTextColor(getResources().getColor(R.color.airtel));
+
+
+                findViewById(R.id.restart_button_icon).setBackgroundColor(getResources().getColor(R.color.airtel));
+                ((TextView)findViewById(R.id.restart_button_text)).setTextColor(getResources().getColor(R.color.airtel));
+
             }
         }
     }
@@ -49,7 +74,7 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.home);
 
         CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
-        currentReportVew.showStartButton();
+        currentReportVew.showInitialStartButton();
 
         LastResultsView lastResultsView = (LastResultsView) HomeActivity.this.findViewById(R.id.last_results_container);
         lastResultsView.updateLastResults();
@@ -69,7 +94,7 @@ public class HomeActivity extends Activity {
 
                 TextView connectionType = (TextView) HomeActivity.this.findViewById(R.id.connection_type);
 
-                ImageView bitranksLogo = (ImageView) HomeActivity.this.findViewById(R.id.bitranks_logo);
+                ImageView bitranksLogo = (ImageView) HomeActivity.this.findViewById(R.id.connection_strenght_icon);
 
                 if (sigtrac.getConnectionType() != null) {
                     connectionType.setVisibility(View.VISIBLE);
@@ -80,11 +105,11 @@ public class HomeActivity extends Activity {
                 }
 
                 if (sigtrac.get_signalStrengthLevel() == "THREE_BAR"){
-                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_3_bar);
+                    bitranksLogo.setImageResource(R.drawable.connection_strength_three);
                 } else if (sigtrac.get_signalStrengthLevel() == "TWO_BAR"){
-                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_2_bar);
+                    bitranksLogo.setImageResource(R.drawable.connection_strength_two);
                 } else {
-                    bitranksLogo.setImageResource(R.drawable.bitranks_logo_1_bar);
+                    bitranksLogo.setImageResource(R.drawable.connection_strength_one);
                 }
 
                 if (sigtrac.getKbps() > 0) {
@@ -96,10 +121,11 @@ public class HomeActivity extends Activity {
                 PingService.PingResults ping = sigtrac.getPingResults();
                 currentReportVew.setPing(ping);
 
-                if (!sigtrac.isRunning()) {
-                    lastResultsView.updateLastResults();
-                    currentReportVew.showStartButton();
-                }
+                currentReportVew.toggleRestartButton(sigtrac.isRunning());
+
+//                if (!sigtrac.isRunning()) {
+//                    currentReportVew.showInitialStartButton();
+//                }
 
                 if (sigtrac.isWifi()) {
                     Toast.makeText(HomeActivity.this, "Sorry, can't run mobile network test while connected to wifi", Toast.LENGTH_SHORT).show();
@@ -141,6 +167,8 @@ public class HomeActivity extends Activity {
         startService(intent);
         CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
         currentReportVew.showProgressBar();
+        LastResultsView lastResultsView = (LastResultsView) HomeActivity.this.findViewById(R.id.last_results_container);
+        lastResultsView.updateLastResults();
 
     }
 

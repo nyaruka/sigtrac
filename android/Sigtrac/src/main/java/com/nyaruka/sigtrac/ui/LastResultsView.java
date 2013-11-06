@@ -15,10 +15,10 @@ import java.util.Date;
 
 public class LastResultsView extends RelativeLayout {
 
-    private TextView m_lastResultsSpeedTextView;
-    private TextView m_lastResultsPingTextView;
-    private TextView m_lastResultsPacketsDropped;
-    private TextView m_lastResultsCreated;
+    private TextView m_lastResultsTimeTextView;
+    private TextView m_lastResultsSpeedValueTextView;
+    private TextView m_lastResultsPingTimeValueTextView;
+    private TextView m_lastResultsPacketsLossValueTextView;
 
     public LastResultsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,32 +32,32 @@ public class LastResultsView extends RelativeLayout {
         super(context, attrs, defStyle);
     }
 
-    public TextView getLastResultsSpeedView() {
-        if (m_lastResultsSpeedTextView == null) {
-            m_lastResultsSpeedTextView = (TextView)findViewById(R.id.last_results_speed);
+    public TextView getLastResultsTimeTextView() {
+        if (m_lastResultsTimeTextView == null) {
+            m_lastResultsTimeTextView = (TextView)findViewById(R.id.last_results_time);
         }
-        return m_lastResultsSpeedTextView;
+        return m_lastResultsTimeTextView;
     }
 
-    public TextView getLastResultsPingView() {
-        if (m_lastResultsPingTextView == null) {
-            m_lastResultsPingTextView = (TextView) findViewById(R.id.last_results_avg_time);
+    public TextView getLastResultsSpeedValueTextView() {
+        if (m_lastResultsSpeedValueTextView == null) {
+            m_lastResultsSpeedValueTextView = (TextView)findViewById(R.id.last_results_speed_value);
         }
-        return m_lastResultsPingTextView;
+        return m_lastResultsSpeedValueTextView;
     }
 
-    public TextView getLastResultsPacketsDroppedView() {
-        if (m_lastResultsPacketsDropped == null){
-            m_lastResultsPacketsDropped = (TextView) findViewById(R.id.last_results_packets_dropped);
+    public TextView getLastResultsPingTimeValueTextView() {
+        if (m_lastResultsPingTimeValueTextView == null) {
+            m_lastResultsPingTimeValueTextView = (TextView) findViewById(R.id.last_results_ping_time_value);
         }
-        return m_lastResultsPacketsDropped;
+        return m_lastResultsPingTimeValueTextView;
     }
 
-    public TextView getLastResultsCreated() {
-        if (m_lastResultsCreated == null){
-            m_lastResultsCreated = (TextView) findViewById(R.id.last_results_created);
+    public TextView getLastResultsPacketsLossValueTextView() {
+        if (m_lastResultsPacketsLossValueTextView == null){
+            m_lastResultsPacketsLossValueTextView = (TextView) findViewById(R.id.last_results_packet_loss_value);
         }
-        return m_lastResultsCreated;
+        return m_lastResultsPacketsLossValueTextView;
     }
 
 
@@ -72,19 +72,19 @@ public class LastResultsView extends RelativeLayout {
         // TO-DO find a way to display time elapsed instead.
 
         if (kbps != null) {
-            getLastResultsSpeedView().setText(kbps);
+            getLastResultsSpeedValueTextView().setText(kbps);
         }
 
         if (ping !=null) {
-            getLastResultsPingView().setText(ping + "ms");
+            getLastResultsPingTimeValueTextView().setText(ping + "ms");
         }
 
         if (packets_dropped != null) {
-            getLastResultsPacketsDroppedView().setText(packets_dropped + "%");
+            getLastResultsPacketsLossValueTextView().setText(packets_dropped + "%");
         }
 
         if (time > 0) {
-            getLastResultsCreated().setText(dateFormat.format(new Date(time)));
+            getLastResultsTimeTextView().setText(dateFormat.format(new Date(time)));
         }
 
         if (kbps == null && ping == null && packets_dropped == null && time == 0) {

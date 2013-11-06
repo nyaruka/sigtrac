@@ -3,4 +3,6 @@
     <color name="mtn">#FEb325</color>
     <color name="tigo">#204497</color>
     <color name="airtel">#EB2026</color>
+    <color name="full_white">#FFFFFF</color>
+    <color name="transparent_white">#90FFFFFF</color>
 </resources>

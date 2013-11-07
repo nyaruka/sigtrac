@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
@@ -19,6 +19,10 @@ import android.widget.Toast;
 import com.nyaruka.sigtrac.ui.CurrentReportVew;
 import com.nyaruka.sigtrac.ui.LastResultsView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class HomeActivity extends Activity {
 
     public static final String EXTRA_HOST = "host";
@@ -27,6 +31,14 @@ public class HomeActivity extends Activity {
 
     private BroadcastReceiver m_receiver;
 
+    private void setPhoneDetails() {
+        ((TextView)findViewById(R.id.phone_model)).setText(Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL.toUpperCase());
+
+        DateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        Date date = new Date();
+
+        ((TextView)findViewById(R.id.current_date)).setText(dateFormat.format(date).toUpperCase());
+    }
 
     private void setCarrier(String carrierName, String carrierCode) {
         Sigtrac.log("Setting carrier: " + carrierName + " (" + carrierCode + ")");
@@ -82,6 +94,7 @@ public class HomeActivity extends Activity {
 
 
         TelephonyManager tele = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        setPhoneDetails();
         setCarrier(tele.getSimOperatorName(), tele.getSimOperator());
         m_receiver = new BroadcastReceiver() {
             @Override
@@ -123,10 +136,6 @@ public class HomeActivity extends Activity {
                 currentReportVew.setPing(ping);
 
                 currentReportVew.toggleRestartButton(sigtrac.isRunning());
-
-//                if (!sigtrac.isRunning()) {
-//                    currentReportVew.showInitialStartButton();
-//                }
 
                 if (sigtrac.isWifi()) {
                     Toast.makeText(HomeActivity.this, "Sorry, can't run mobile network test while connected to wifi", Toast.LENGTH_SHORT).show();

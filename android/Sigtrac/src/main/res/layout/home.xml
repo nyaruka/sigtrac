@@ -1,7 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/mtn"
+    android:background="@color/airtel"
     android:id="@+id/main_bg"
     tools:context=".HomeActivity"
     android:layout_width="match_parent"
@@ -9,10 +9,10 @@
     android:fillViewport="true">
 
     <RelativeLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingLeft="@dimen/edge_spacing"
+        android:paddingRight="@dimen/edge_spacing"
+        android:paddingTop="@dimen/edge_spacing"
+        android:paddingBottom="@dimen/edge_spacing"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -29,9 +29,9 @@
                 android:layout_width="102dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/edge_spacing"
                 android:text="HSPA+"
-                android:textColor="#90ffffff"
+                android:textColor="@color/transparent_white"
                 android:gravity="center_vertical|right"
                 />
 
@@ -66,8 +66,8 @@
                 android:id="@+id/current_date"
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
-                android:text="NOVEMBER 05, 2013"
-                android:textColor="#90ffffff"
+                android:text=""
+                android:textColor="@color/transparent_white"
                 android:gravity="center_vertical|right"
                 android:layout_marginBottom="4dp"/>
 
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
                 android:text="SAMSUNG GALAXY S4"
-                android:textColor="#ffffff"
+                android:textColor="@color/full_white"
                 android:textSize="16dp"
                 android:gravity="center_vertical|right"
                 android:layout_below="@id/current_date"/>
@@ -103,7 +103,7 @@
                     android:id="@+id/start_button"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
-                    android:background="#fff"
+                    android:background="@color/full_white"
                     android:gravity="center_vertical|center">
 
                     <ImageView
@@ -135,8 +135,8 @@
                     android:layout_width="222dp"
                     android:layout_below="@id/start_button"
                     android:gravity="right"
-                    android:layout_marginTop="20dp"
-                    android:textColor="#90ffffff"
+                    android:layout_marginTop="@dimen/edge_spacing"
+                    android:textColor="@color/transparent_white"
                     android:text="YOUR SPEED TEST WILL BE SHARED ANONYMOUSLY ON BITRANKS.COM FOR THE BEST RESULT, PLEASE ENABLE GPS"/>
 
             </RelativeLayout>
@@ -158,7 +158,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="PING"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/full_white"
                     android:layout_alignParentRight="true"
                     android:textSize="16dp"/>
 
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="MILLISECS"
-                    android:textColor="#90ffffff"
+                    android:textColor="@color/transparent_white"
                     android:layout_below="@id/current_report_running_ping_time_label"
                     android:layout_alignParentRight="true"/>
 
@@ -187,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="325"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/full_white"
                     android:textSize="38dp"
                     android:layout_below="@id/current_report_running_ping_time_unit_label"
                     android:layout_alignParentRight="true"/>
@@ -198,9 +198,9 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="PACKET LOSS"
-                    android:textColor="#90ffffff"
+                    android:textColor="@color/transparent_white"
                     android:layout_below="@id/current_report_running_ping_time_value"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/edge_spacing"
                     android:layout_alignParentRight="true"/>
 
 
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="59%"
-                    android:textColor="#ffffff"
+                    android:textColor="@color/full_white"
                     android:textSize="38dp"
                     android:layout_below="@id/current_report_running_packets_loss_label"
                     android:layout_alignParentRight="true"/>
@@ -218,7 +218,7 @@
                 <RelativeLayout
                     android:layout_height="match_parent"
                     android:layout_width="242dp"
-                    android:paddingRight="20dp"
+                    android:paddingRight="@dimen/edge_spacing"
                     >
 
 
@@ -230,7 +230,7 @@
                         android:layout_alignParentRight="true"
                         android:text="DOWNLOAD SPEED"
                         android:textSize="16dp"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/full_white"
                         android:gravity="right|center_vertical"/>
 
 
@@ -239,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="KBPS"
-                        android:textColor="#90ffffff"
+                        android:textColor="@color/transparent_white"
                         android:layout_alignParentRight="true"
                         android:layout_below="@id/current_report_running_speed_label"/>
 
@@ -257,7 +257,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="43,585"
-                        android:textColor="#ffffff"
+                        android:textColor="@color/full_white"
                         android:textSize="54dp"
                         android:layout_below="@id/current_report_running_speed_label"
                         android:gravity="right"
@@ -268,7 +268,7 @@
                         android:id="@+id/current_report_running_restart_button"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:background="#fff"
+                        android:background="@color/full_white"
                         android:gravity="center_vertical|center"
                         android:layout_below="@id/current_report_running_speed_icon"
                         android:layout_marginTop="38dp"
@@ -303,7 +303,7 @@
                     android:layout_height="match_parent"
                     android:layout_width="2dp"
                     android:layout_marginLeft="242dp"
-                    android:background="#90ffffff"/>
+                    android:background="@color/transparent_white"/>
 
             </RelativeLayout>
 
@@ -321,15 +321,15 @@
                 android:layout_height="wrap_content"
                 android:layout_width="222dp"
                 android:text="NOVERMBER 28, 2045"
-                android:textColor="#90ffffff"
+                android:textColor="@color/transparent_white"
                 android:gravity="right|center_vertical"/>
 
             <com.nyaruka.sigtrac.ui.DinTextView
                 android:id="@+id/last_results_title"
                 android:layout_width="222dp"
                 android:layout_height="wrap_content"
-                android:text="PAST TEST RESULTS"
-                android:textColor="#ffffff"
+                android:text="TEST RESULTS"
+                android:textColor="@color/full_white"
                 android:textSize="16dp"
                 android:layout_marginBottom="35dp"
                 android:layout_below="@id/last_results_time"
@@ -343,7 +343,7 @@
                 android:text="PACKET LOSS"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"
-                android:textColor="#90ffffff"/>
+                android:textColor="@color/transparent_white"/>
 
             <com.nyaruka.sigtrac.ui.DinCondensedTextView
                 android:id="@+id/last_results_packet_loss_value"
@@ -353,7 +353,7 @@
                 android:text="38%"
                 android:textSize="24dp"
                 android:layout_below="@id/last_results_packet_loss_label"
-                android:textColor="#ffffff"/>
+                android:textColor="@color/full_white"/>
 
 
             <com.nyaruka.sigtrac.ui.DinTextView
@@ -363,7 +363,7 @@
                 android:text="PING TIME"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"
-                android:textColor="#90ffffff"
+                android:textColor="@color/transparent_white"
                 android:gravity="right|center_vertical"/>
 
             <com.nyaruka.sigtrac.ui.DinCondensedTextView
@@ -372,7 +372,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignRight="@+id/last_results_ping_time_label"
                 android:text="893"
-                android:textColor="#ffffff"
+                android:textColor="@color/full_white"
                 android:textSize="24dp"
                 android:gravity="right|center_vertical"
                 android:layout_below="@id/last_results_ping_time_label" />
@@ -396,7 +396,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="DOWNLOAD SPEED"
-                android:textColor="#90ffffff"
+                android:textColor="@color/transparent_white"
                 android:textSize="10dp"
                 android:layout_below="@id/last_results_title"/>
 
@@ -406,10 +406,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="68,978"
-                android:textColor="#ffffff"
+                android:textColor="@color/full_white"
                 android:textSize="24dp"
                 android:layout_below="@id/last_results_speed_label"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="@dimen/edge_spacing"/>
 
             <ImageView
                 android:id="@+id/last_results_speed_icon"

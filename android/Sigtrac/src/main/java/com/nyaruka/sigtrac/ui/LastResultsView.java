@@ -68,8 +68,6 @@ public class LastResultsView extends RelativeLayout {
         String ping = prefs.getString("lastResultsPing", null);
         String packets_dropped = prefs.getString("lastResultsPacketsDropped", null);
         Long time = prefs.getLong("lastResultsCreated", 0);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        // TO-DO find a way to display time elapsed instead.
 
         if (kbps != null) {
             getLastResultsSpeedValueTextView().setText(kbps);
@@ -84,11 +82,32 @@ public class LastResultsView extends RelativeLayout {
         }
 
         if (time > 0) {
-            getLastResultsTimeTextView().setText(dateFormat.format(new Date(time)));
+            getLastResultsTimeTextView().setText(agoTime(time));
         }
 
         if (kbps == null && ping == null && packets_dropped == null && time == 0) {
             setVisibility(GONE);
+        }
+
+    }
+
+    public String agoTime(Long time){
+        Long timedelta = (System.currentTimeMillis() - time)/1000;
+
+        if (timedelta <= 60) {
+            return "A MOMENT AGO";
+        } else if (timedelta <= 3600) {
+            Long minutes = timedelta/60;
+            return minutes + " MIN AGO";
+        } else if (timedelta <= 86400) {
+            Long hours = timedelta/3600;
+            return hours + " HOURS AGO";
+        } else if (timedelta <= 604800) {
+            Long days = timedelta/ 86400;
+            return days + " DAYS AGO";
+        } else {
+            DateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy - hh:mm");
+            return dateFormat.format(new Date(time));
         }
 
     }

@@ -3,7 +3,6 @@ package com.nyaruka.sigtrac.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.sax.RootElement;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,10 +13,8 @@ import android.widget.TextView;
 import com.nyaruka.sigtrac.PingService;
 import com.nyaruka.sigtrac.R;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 
 
 public class CurrentReportVew extends RelativeLayout {

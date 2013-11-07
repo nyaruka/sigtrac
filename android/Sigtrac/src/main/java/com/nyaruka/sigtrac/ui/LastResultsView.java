@@ -69,12 +69,14 @@ public class LastResultsView extends RelativeLayout {
         String packets_dropped = prefs.getString("lastResultsPacketsDropped", null);
         Long time = prefs.getLong("lastResultsCreated", 0);
 
+        setVisibility(VISIBLE);
+
         if (kbps != null) {
             getLastResultsSpeedValueTextView().setText(kbps);
         }
 
         if (ping !=null) {
-            getLastResultsPingTimeValueTextView().setText(ping + "ms");
+            getLastResultsPingTimeValueTextView().setText(ping + "");
         }
 
         if (packets_dropped != null) {

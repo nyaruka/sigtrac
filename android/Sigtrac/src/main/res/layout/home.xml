@@ -114,13 +114,13 @@
                         android:src="@drawable/ic_start_test"
                         />
 
-                    <TextView
+                    <com.nyaruka.sigtrac.ui.DinCondensedTextView
                         android:id="@+id/start_button_text"
                         android:paddingLeft="45dp"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="START SPEED TEST"
-                        android:textSize="27dp"
+                        android:textSize="30dp"
                         android:textColor="@color/airtel"
                         android:textStyle="bold"
                         />
@@ -128,7 +128,7 @@
                 </RelativeLayout>
 
 
-                <TextView
+                <com.nyaruka.sigtrac.ui.DinTextView
                     android:id="@+id/help_text"
 
                     android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                         android:layout_width="wrap_content"
                         android:text="43,585"
                         android:textColor="@color/full_white"
-                        android:textSize="54dp"
+                        android:textSize="62dp"
                         android:layout_below="@id/current_report_running_speed_label"
                         android:gravity="right"
                         android:layout_toLeftOf="@id/current_report_running_speed_unit_label"

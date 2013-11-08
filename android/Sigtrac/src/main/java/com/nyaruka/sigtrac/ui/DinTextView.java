@@ -9,17 +9,23 @@ public class DinTextView extends TextView {
 
     public DinTextView(Context context) {
         super(context);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
     }
 
     public DinTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
     }
 
     public DinTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
     }
 
     private void setFont() {

@@ -258,9 +258,10 @@
                         android:layout_width="wrap_content"
                         android:text="43,585"
                         android:textColor="@color/full_white"
-                        android:textSize="62dp"
+                        android:textSize="68dp"
+                        android:layout_marginTop="-9dp"
                         android:layout_below="@id/current_report_running_speed_label"
-                        android:gravity="right"
+                        android:gravity="top|right"
                         android:layout_toLeftOf="@id/current_report_running_speed_unit_label"
                         android:paddingRight="8dp"/>
 

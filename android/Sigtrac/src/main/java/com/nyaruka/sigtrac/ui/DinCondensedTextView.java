@@ -9,18 +9,25 @@ public class DinCondensedTextView extends TextView {
 
     public DinCondensedTextView(Context context) {
         super(context);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
+
     }
 
 
     public DinCondensedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
     }
 
     public DinCondensedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        setFont();
+        if(!isInEditMode()) {
+            setFont();
+        }
     }
 
     private void setFont() {

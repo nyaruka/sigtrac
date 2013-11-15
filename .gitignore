@@ -4,6 +4,7 @@ deploy
 *.pyc
 local_settings.py
 env
+src
 *~
 .idea
 sigtrac/settings.py

@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +34,7 @@ public class HomeActivity extends Activity {
     private BroadcastReceiver m_receiver;
 
     private void setPhoneDetails() {
-        ((TextView)findViewById(R.id.phone_model)).setText(Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL.toUpperCase());
+        ((TextView)findViewById(R.id.phone_model)).setText(Build.MODEL.toUpperCase());
 
         DateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
         Date date = new Date();
@@ -85,6 +86,7 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.home);
 
         CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
@@ -165,10 +167,14 @@ public class HomeActivity extends Activity {
 
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.connection_strenght_icon) {
             startActivity(new Intent(this, SettingsActivity.class));
         }
         return super.onMenuItemSelected(featureId, item);
+    }
+
+    public void onClickShowPreference(View view) {
+       startActivity(new Intent(this, SettingsActivity.class));
     }
 
     public void onDemandStart(View view) {

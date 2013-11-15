@@ -68,7 +68,7 @@ app.controller('MainCtrl', function($scope, averages, carriers, series) {
         backgroundColor: null,
         type: 'column',
         height: 200,
-        marginBottom: 0
+	marginBottom: 0
       },
       plotOptions: {
         column: {
@@ -86,6 +86,7 @@ app.controller('MainCtrl', function($scope, averages, carriers, series) {
         }
       },
       yAxis: {
+	min: 0,
         title: {
           text: null,
         },

@@ -4,6 +4,7 @@ deploy
 *.pyc
 local_settings.py
 env
+src
 *~
 .idea
 sigtrac/settings.py
@@ -15,3 +16,8 @@ sigtrac.db
 db/*
 .gradle
 .idea/workspace.xml
+android/sigtrac/src/main/gen/
+android/sigtrac/src/main/main.iml
+android/.idea/misc.xml
+android/.idea/modules.xml
+android/Sigtrac/Sigtrac.iml

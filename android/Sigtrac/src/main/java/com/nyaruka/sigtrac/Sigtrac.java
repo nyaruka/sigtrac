@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.telephony.SignalStrength;
 import android.util.Log;
 
 
@@ -25,6 +26,8 @@ public class Sigtrac extends Application {
     private int m_kbps;
     private boolean m_wifi;
     private int m_bytesUsed;
+    private String m_connectionType;
+    private String m_signalStrenghtLevel = "ONE_BAR";
 
     public void setBytesUsed(int bytes) {
         m_bytesUsed = bytes;
@@ -124,6 +127,28 @@ public class Sigtrac extends Application {
         return m_kbps;
     }
 
+    public void setConnectionType(String connectionType) {
+        m_connectionType = connectionType;
+    }
+
+    public String getConnectionType() {
+        return m_connectionType;
+    }
+
+    public void setSignalStrengthLevel(SignalStrength signalStrength) {
+        if (signalStrength.getGsmSignalStrength() >= 18){
+            m_signalStrenghtLevel = "THREE_BAR";
+        } else if (signalStrength.getGsmSignalStrength() >= 8) {
+            m_signalStrenghtLevel = "TWO_BAR";
+        } else {
+            m_signalStrenghtLevel = "ONE_BAR";
+        }
+    }
+
+    public String get_signalStrengthLevel() {
+        return m_signalStrenghtLevel;
+    }
+
     public void setWifi(boolean wifi) {
         m_wifi = wifi;
         invalidateUI();
@@ -148,4 +173,6 @@ public class Sigtrac extends Application {
             context.startService(run);
         }
     }
+
+
 }

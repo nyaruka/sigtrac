@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,28 +15,25 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
-import android.util.Base64;
 import android.util.Log;
-import org.apache.http.HttpResponse;
+
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.prefs.Preferences;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,9 +97,13 @@ public class PingService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Sigtrac sigtrac = (Sigtrac)getApplication();
+
 
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+
 
         SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -123,8 +123,8 @@ public class PingService extends IntentService {
             bytesPerRun = -1;
         }
 
-        Sigtrac sigtrac = (Sigtrac)getApplication();
         sigtrac.setPingResults(null);
+        sigtrac.setConnectionType(null);
         sigtrac.setKbps(-1);
         sigtrac.setWifi(false);
         sigtrac.setRunning(true);
@@ -132,22 +132,37 @@ public class PingService extends IntentService {
         if (wifi.isConnected()) {
             Sigtrac.log("Wifi connected, not running test");
             sigtrac.setWifi(true);
+            sigtrac.setRunning(false);
             return;
         }
 
         updateLocation();
+
+        if (m_lastSignal != null){
+            sigtrac.setSignalStrengthLevel(m_lastSignal);
+        }
+
+        sigtrac.setConnectionType(getConnectedDataNetwork(telephonyManager.getNetworkType()));
+
+
         String host = intent.getStringExtra(HomeActivity.EXTRA_HOST);
+
 
         // do some pinging
         PingResults ping = pingHost(host, 6);
+
+        downloadFile(DOWNLOAD_FILE, bytesPerRun);
+
+
         if (ping != null) {
             sigtrac.setPingResults(ping);
         }
 
-        downloadFile(DOWNLOAD_FILE, bytesPerRun);
         Sigtrac.log("Location: " + m_currentLocation);
-        postData(ping, sigtrac.getKbps());
+        saveData(ping, sigtrac.getKbps(), telephonyManager);
+
         sigtrac.setRunning(false);
+
     }
 
     private void downloadFile(String url, int maxBytes) {
@@ -231,16 +246,9 @@ public class PingService extends IntentService {
         }
     }
 
-    public String computeHash(String secret, String input) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(new SecretKeySpec((secret).getBytes(), "ASCII"));
-        mac.update(input.getBytes("UTF-8"));
-        byte[] byteData = mac.doFinal();
-        return Base64.encodeToString(byteData, Base64.URL_SAFE).trim();
-    }
 
-    public void postData(PingResults ping, int kbps) {
 
+    public void saveData(PingResults ping, int kbps, TelephonyManager telephonyManager) {
         if (ping == null || !ping.isValid()) {
             Sigtrac.log("Invalid ping, skipping");
             return;
@@ -251,7 +259,6 @@ public class PingService extends IntentService {
             return;
         }
 
-        TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -261,21 +268,17 @@ public class PingService extends IntentService {
         }
         String deviceId = prefs.getString("deviceId", uuid);
 
-        // TODO: write these to a file first before posting in case there's no internet
-
-        HttpClient client = new DefaultHttpClient();
-
         try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
 
-            PackageInfo info  = getPackageManager().getPackageInfo(getPackageName(), 0);
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("device", deviceId));
-            nameValuePairs.add(new BasicNameValuePair("carrier", manager.getSimOperatorName()));
-            nameValuePairs.add(new BasicNameValuePair("country", manager.getSimCountryIso()));
+            nameValuePairs.add(new BasicNameValuePair("carrier", telephonyManager.getSimOperatorName()));
+            nameValuePairs.add(new BasicNameValuePair("country", telephonyManager.getSimCountryIso()));
             nameValuePairs.add(new BasicNameValuePair("device_build", Build.MANUFACTURER + ";" + Build.MODEL));
             nameValuePairs.add(new BasicNameValuePair("device_type", "AND"));
-            nameValuePairs.add(new BasicNameValuePair("connection_type", cm.getActiveNetworkInfo().getSubtypeName()));
+            nameValuePairs.add(new BasicNameValuePair("connection_type", getConnectedDataNetwork(telephonyManager.getNetworkType())));
             nameValuePairs.add(new BasicNameValuePair("download_speed", "" + kbps));
             nameValuePairs.add(new BasicNameValuePair("ping", "" + ping.avg.intValue()));
             nameValuePairs.add(new BasicNameValuePair("packets_dropped", "" + ping.pctLost));
@@ -288,30 +291,116 @@ public class PingService extends IntentService {
                 nameValuePairs.add(new BasicNameValuePair("longitude", "" + m_currentLocation.m_lng));
             }
 
+            long now = System.currentTimeMillis();
 
-            long created = System.currentTimeMillis() / 1000;
+            long created = now / 1000;
             nameValuePairs.add(new BasicNameValuePair("created_on", "" + created));
 
-            // String url = "http://192.168.0.108:8000/submit";
-            String url = "http://bitranks.com/submit";
+
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nameValuePairs);
             String entityString = EntityUtils.toString(entity);
-            if (BuildConfig.SECRET != null) {
-                Sigtrac.log("Signing with " + BuildConfig.SECRET);
-                String signature = computeHash(BuildConfig.SECRET+created, entityString);
-                url += "?" + entityString + "&s=" + URLEncoder.encode(signature);
-            }
-            Sigtrac.log("URL: " + url);
 
-            HttpPost post = new HttpPost(url);
-            Sigtrac.log(entityString);
+            String filename = "" + created;
 
-            // Execute HTTP Post Request
-            HttpResponse response = client.execute(post);
-            Sigtrac.log("Response: " + EntityUtils.toString(response.getEntity()));
+            FileOutputStream fileOutputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            fileOutputStream.write(entityString.getBytes());
+            fileOutputStream.close();
 
-        } catch (Throwable t) {
-            Log.e(Sigtrac.TAG, "Failed post", t);
+
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putString("lastResultsSpeed", "" + kbps);
+            edit.putString("lastResultsPing", "" + ping.avg.intValue());
+            edit.putString("lastResultsPacketsDropped", "" + ping.pctLost);
+            edit.putLong("lastResultsCreated", now);
+            edit.commit();
+
+            Intent intent = new Intent(this, PostDataService.class);
+            startService(intent);
+
+
+        } catch (Throwable t){
+            Log.e(Sigtrac.TAG, "Failed Saving data to file", t);
+        }
+
+
+    }
+
+    public String getConnectedDataNetwork(int networkType) {
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+                return "GPRS";
+
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+                return "EDGE";
+
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+                return "UMTS";
+
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+                return "CDMA";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                return "EVDO rev.0";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                return "EVDO rev.A";
+
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+                return "1xRTT";
+
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+                return "HSPDA";
+
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+                return "HSUPA";
+
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+                return "HSPA";
+
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "IDEN";
+
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                return "EVDO rev.B";
+
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "LTE";
+
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+                return "eHRPD";
+
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "HSPA+";
+
+            default:
+                return "UNKNOWN";
+
+        }
+    }
+
+
+    public static String getNetworkClass(int networkType) {
+        switch (networkType) {
+            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case TelephonyManager.NETWORK_TYPE_IDEN:
+                return "2G";
+            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case TelephonyManager.NETWORK_TYPE_HSPAP:
+                return "3G";
+            case TelephonyManager.NETWORK_TYPE_LTE:
+                return "4G";
+            default:
+                return "UNKNOWN";
         }
     }
 

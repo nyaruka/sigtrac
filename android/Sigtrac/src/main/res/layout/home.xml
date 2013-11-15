@@ -1,92 +1,445 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/mtn"
+    android:id="@+id/main_bg"
+    tools:context=".HomeActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@color/airtel"
-    android:id="@+id/main_bg"
-    tools:context=".HomeActivity">
+    android:fillViewport="true">
 
-    <ImageView
+    <RelativeLayout
+        android:paddingLeft="@dimen/edge_spacing"
+        android:paddingRight="@dimen/edge_spacing"
+        android:paddingTop="@dimen/edge_spacing"
+        android:paddingBottom="@dimen/edge_spacing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/carrier_logo"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/sigtrac_airtel"/>
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            android:id="@+id/carrier_details">
+
+            <ImageView
+                android:id="@+id/icon_preferences"
+                android:paddingLeft="16dp"
+                android:paddingTop="23dp"
+                android:paddingBottom="9dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_preferences"
+                android:onClick="onClickShowPreference"
+                android:layout_alignParentRight="true"/>
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/connection_type"
+                android:layout_height="wrap_content"
+                android:layout_width="56dp"
+                android:text=""
+                android:layout_toLeftOf="@id/icon_preferences"
+                android:textColor="@color/transparent_white"
+                android:gravity="center_horizontal"/>
+
+            <ImageView
+                android:id="@+id/connection_strenght_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/connection_type"
+                android:layout_toLeftOf="@id/icon_preferences"
+                android:src="@drawable/connection_strength_three"/>
+
+            <ImageView
+                android:id="@+id/carrier_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/mtn_logo"
+                android:layout_toLeftOf="@id/connection_strenght_icon"
+                android:layout_marginRight="40dp"
+                android:layout_alignTop="@id/connection_strenght_icon"/>
+
+        </RelativeLayout>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No Data"
-        android:id="@+id/avg_time"
-        android:textSize="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:textColor="#fff"/>
-
-    <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/packets_lost"
-            android:layout_alignParentRight="true"
-            android:textSize="20dp"
-            android:textColor="#fff"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/avg_time"/>
+            android:layout_marginBottom="25dp"
+            android:layout_below="@id/carrier_details"
+            android:id="@+id/phone_details" >
 
-    <ImageView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
-            android:id="@+id/ping_icon"
-            android:layout_below="@+id/packets_lost"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/sigtrac_ping_icon"/>
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/current_date"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text=""
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="120dp"
+                android:textColor="@color/transparent_white" />
 
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/phone_model"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="SAMSUNG GALAXY S4"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="120dp"
+                android:textColor="@color/full_white"
+                android:textSize="16dp"
+                android:layout_below="@id/current_date"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textStyle="bold"
-            android:id="@+id/speed"
-            android:textSize="100dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="speedTapped"
-            android:clickable="true"
-            android:textColor="#fff"/>
+        </RelativeLayout>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="kbps"
-            android:id="@+id/kbps_label"
-            android:layout_alignRight="@+id/speed"
-            android:layout_marginTop="-15dp"
-            android:layout_marginRight="-10dp"
-            android:layout_below="@+id/speed"
-            android:textSize="20dp"
-            android:textColor="#fff"/>
+        <com.nyaruka.sigtrac.ui.CurrentReportVew
+            android:id="@+id/current_report_container"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginBottom="25dp"
+            android:layout_below="@id/phone_details">
 
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/posted"
-            android:id="@+id/posted"
-            android:linksClickable="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="20dp"
-            android:autoLink="web"
-            android:textColor="#fff"/>
+            <RelativeLayout
+                android:visibility="gone"
+                android:onClick="onDemandStart"
+                android:id="@+id/current_report_initial_container"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
 
-</RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/start_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@color/full_white"
+                    android:gravity="center_vertical|center">
+
+                    <ImageView
+                        android:id="@+id/start_button_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/airtel"
+                        android:src="@drawable/ic_start_test"
+                        />
+
+                    <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                        android:id="@+id/start_button_text"
+                        android:paddingLeft="45dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="START SPEED TEST"
+                        android:textSize="30dp"
+                        android:textColor="@color/airtel"
+                        android:textStyle="bold"
+                        />
+
+                </RelativeLayout>
+
+
+                <com.nyaruka.sigtrac.ui.DinTextView
+                    android:id="@+id/help_text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="120dp"
+                    android:layout_below="@id/start_button"
+                    android:gravity="right"
+                    android:layout_marginTop="@dimen/edge_spacing"
+                    android:textColor="@color/transparent_white"
+                    android:text="YOUR SPEED TEST WILL BE SHARED ANONYMOUSLY ON BITRANKS.COM FOR THE BEST RESULT, PLEASE ENABLE GPS"/>
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:visibility="gone"
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:layout_marginRight="120dp" />
+
+            <RelativeLayout
+                android:id="@+id/current_report_running_container"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" >
+
+                <com.nyaruka.sigtrac.ui.DinTextView
+                    android:id="@+id/current_report_running_ping_time_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="PING"
+                    android:textColor="@color/full_white"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+                <ImageView
+                    android:id="@+id/current_report_running_ping_time_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_toLeftOf="@id/current_report_running_ping_time_label"
+                    android:src="@drawable/ic_ping"
+                    android:paddingTop="4dp"
+                    android:paddingRight="4dp"/>
+
+
+                <com.nyaruka.sigtrac.ui.DinTextView
+                    android:id="@+id/current_report_running_ping_time_unit_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="MILLISECS"
+                    android:textColor="@color/transparent_white"
+                    android:layout_below="@id/current_report_running_ping_time_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                    android:id="@+id/current_report_running_ping_time_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/full_white"
+                    android:textSize="38dp"
+                    android:layout_below="@id/current_report_running_ping_time_unit_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <com.nyaruka.sigtrac.ui.DinTextView
+                    android:id="@+id/current_report_running_packets_loss_label"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="PACKET LOSS"
+                    android:textColor="@color/transparent_white"
+                    android:layout_below="@id/current_report_running_ping_time_value"
+                    android:layout_marginTop="@dimen/edge_spacing"
+                    android:layout_alignParentRight="true"/>
+
+
+                <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                    android:id="@+id/current_report_running_packets_loss_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="0%"
+                    android:textColor="@color/full_white"
+                    android:textSize="38dp"
+                    android:layout_below="@id/current_report_running_packets_loss_label"
+                    android:layout_alignParentRight="true"/>
+
+
+                <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginRight="120dp"
+                    android:paddingRight="10dp">
+
+                    <com.nyaruka.sigtrac.ui.DinTextView
+                        android:id="@+id/current_report_running_speed_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="DOWNLOAD SPEED"
+                        android:textSize="16dp"
+                        android:textColor="@color/full_white"
+                        android:gravity="right|center_vertical"/>
+
+
+                    <com.nyaruka.sigtrac.ui.DinTextView
+                        android:id="@+id/current_report_running_speed_unit_label"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="KBPS"
+                        android:textColor="@color/transparent_white"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/current_report_running_speed_label"/>
+
+                    <ImageView
+                        android:id="@+id/current_report_running_speed_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_down_medium"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/current_report_running_speed_unit_label"
+                        android:layout_marginTop="5dp"/>
+
+                    <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                        android:id="@+id/current_report_running_speed_value"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/full_white"
+                        android:textSize="68dp"
+                        android:layout_marginTop="-9dp"
+                        android:layout_below="@id/current_report_running_speed_label"
+                        android:gravity="top|right"
+                        android:layout_toLeftOf="@id/current_report_running_speed_unit_label"
+                        android:paddingRight="8dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/current_report_running_restart_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:background="@color/full_white"
+                        android:gravity="center_vertical|center"
+                        android:layout_below="@id/current_report_running_speed_icon"
+                        android:layout_marginTop="25dp"
+                        android:onClick="onDemandStart"
+                        >
+
+                        <ImageView
+                            android:id="@+id/restart_button_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/mtn"
+                            android:src="@drawable/ic_start_again"
+                            />
+
+                        <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                            android:id="@+id/restart_button_text"
+                            android:gravity="center_vertical|center"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="50dp"
+                            android:layout_alignTop="@id/restart_button_icon"
+                            android:layout_alignBottom="@id/restart_button_icon"
+                            android:text="START AGAIN"
+                            android:textSize="22dp"
+                            android:textColor="@color/mtn"
+                            android:textStyle="bold"
+                            />
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vertical_divider"
+                    android:layout_height="180dp"
+                    android:layout_width="1dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="120dp"
+                    android:background="@color/transparent_white"/>
+
+            </RelativeLayout>
+
+
+        </com.nyaruka.sigtrac.ui.CurrentReportVew>
+
+        <com.nyaruka.sigtrac.ui.LastResultsView
+            android:id="@+id/last_results_container"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_below="@id/current_report_container">
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/last_results_time"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="120dp"
+                android:text="NOVERMBER 28, 2045"
+                android:textColor="@color/transparent_white"
+                android:layout_width="wrap_content" />
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/last_results_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST RESULTS"
+                android:textColor="@color/full_white"
+                android:textSize="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="120dp"
+                android:layout_marginBottom="35dp"
+                android:layout_below="@id/last_results_time"/>
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/last_results_packet_loss_label"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="PACKET LOSS"
+                android:textSize="10dp"
+                android:layout_below="@id/last_results_title"
+                android:textColor="@color/transparent_white"/>
+
+            <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                android:id="@+id/last_results_packet_loss_value"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="0%"
+                android:textSize="24dp"
+                android:layout_below="@id/last_results_packet_loss_label"
+                android:textColor="@color/full_white"/>
+
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/last_results_ping_time_label"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="120dp"
+                android:text="PING TIME"
+                android:textSize="10dp"
+                android:layout_below="@id/last_results_title"
+                android:textColor="@color/transparent_white"
+                android:gravity="right|center_vertical"/>
+
+            <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                android:id="@+id/last_results_ping_time_value"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignRight="@+id/last_results_ping_time_label"
+                android:text="0"
+                android:textColor="@color/full_white"
+                android:textSize="24dp"
+                android:gravity="right|center_vertical"
+                android:paddingLeft="5dp"
+                android:layout_below="@id/last_results_ping_time_label" />
+
+            <ImageView
+                android:id="@+id/last_results_ping_time_icon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_ping"
+                android:layout_below="@id/last_results_ping_time_label"
+                android:layout_toLeftOf="@+id/last_results_ping_time_value"
+                android:paddingTop="3dp"
+                android:layout_alignBottom="@+id/last_results_ping_time_value" />
+
+            <com.nyaruka.sigtrac.ui.DinTextView
+                android:id="@+id/last_results_speed_label"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="DOWNLOAD SPEED"
+                android:textColor="@color/transparent_white"
+                android:textSize="10dp"
+                android:layout_below="@id/last_results_title"/>
+
+
+            <com.nyaruka.sigtrac.ui.DinCondensedTextView
+                android:id="@+id/last_results_speed_value"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="0"
+                android:textColor="@color/full_white"
+                android:textSize="24dp"
+                android:paddingLeft="5dp"
+                android:layout_below="@id/last_results_speed_label"
+                android:layout_marginLeft="20dp"/>
+
+            <ImageView
+                android:id="@+id/last_results_speed_icon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/last_results_speed_label"
+                android:layout_alignBottom="@+id/last_results_speed_value"
+                android:src="@drawable/ic_down_small"/>
+
+
+        </com.nyaruka.sigtrac.ui.LastResultsView>
+
+    </RelativeLayout>
+
+
+</ScrollView>

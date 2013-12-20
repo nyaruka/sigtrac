@@ -39,7 +39,13 @@ import java.util.regex.Pattern;
 
 public class PingService extends IntentService {
 
-    private static final String DOWNLOAD_FILE = "http://speedtest.newark.linode.com/100MB-newark.bin";
+    // private static final String DOWNLOAD_FILE = "http://speedtest.atlanta.linode.com/100MB-atlanta.bin";
+    // private static final String DOWNLOAD_FILE = "http://speedtest.newark.linode.com/100MB-newark.bin";
+    // public static final String DOWNLOAD_FILE = "http://speedtest.london.linode.com/100MB-london.bin";
+    // public static final String DOWNLOAD_FILE = "http://bitranks.com/media/100MB.bin";
+    public static final String DOWNLOAD_FILE = "https://s3.amazonaws.com/bitranks/100MB.bin";
+
+    public static final String PING = "8.8.8.8";
 
     private PhoneStateListener m_signalListener;
     private SignalStrength m_lastSignal;

@@ -180,7 +180,7 @@ public class HomeActivity extends Activity {
     public void onDemandStart(View view) {
         Intent intent = new Intent(this, PingService.class);
         intent.putExtra(EXTRA_ON_DEMAND, true);
-        intent.putExtra(EXTRA_HOST, "www.google.com");
+        intent.putExtra(EXTRA_HOST, PingService.PING);
         startService(intent);
         CurrentReportVew currentReportVew = (CurrentReportVew) HomeActivity.this.findViewById(R.id.current_report_container);
         currentReportVew.showProgressBar();

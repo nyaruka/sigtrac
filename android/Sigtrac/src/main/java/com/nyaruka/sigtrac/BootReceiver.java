@@ -26,7 +26,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     private static void startService(Context context){
         Intent intent = new Intent(context, PingService.class);
-        intent.putExtra(HomeActivity.EXTRA_HOST, "www.google.com");
+        intent.putExtra(HomeActivity.EXTRA_HOST, PingService.PING);
         context.startService(intent);
     }
 
